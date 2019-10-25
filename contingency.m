@@ -5,14 +5,15 @@ params.distractor_sounds = {};
 params.phases = [20, 20];
 
 params.means = [.3, 1];
-params.SDs = [.2, .2];
+params.SDs = [0, .2];
 
 params.method = "intervals"
 params.target_rates = [.3, .3];
 params.intertarget_interval_range = [2, 3];
 
+stimulus = contingency_stimulus(params);
 
-sound(contingency_stimulus(params), 44100)
+audiowrite("contingency.wav", stimulus, 44100);
 
 
 function snd_total=contingency_stimulus(params)
@@ -41,7 +42,7 @@ duration = sum(params.phases)
 targets = zeros(1, Fs*(duration+1));
 cues = zeros(1, Fs*(duration+1));
 distractors = zeros(1, Fs*(duration+1));
-snd_total = zeros(1, Fs*(duration+1));
+snd_total = zeros(Fs*(duration+1),2);
 
 phase_start_sample = 1;
 
@@ -50,12 +51,12 @@ if params.method == "rates"
     for j = 1:length(params.phases)
         current_targets = (rand(1,params.phases(j)*Fs+1) < params.target_rates(j)/Fs);
         targets(phase_start_sample : phase_start_sample + params.phases(j)*Fs) = current_targets;   
-        snd_total(phase_start_sample : phase_start_sample + length(current_targets) +length(target_sound)- 2) = conv(current_targets, target_sound);
+        snd_total(phase_start_sample : phase_start_sample + length(current_targets) +length(target_sound)- 2, 1) = conv(current_targets, target_sound);
         all_targets = find(current_targets);
         for target_num = 1:length(all_targets)
             cue_sample = all_targets(target_num) - max(floor((params.SDs(j)*Fs*randn(1) + Fs*params.means(j))), 0);
             if phase_start_sample + cue_sample>0
-                snd_total(phase_start_sample + cue_sample : phase_start_sample + cue_sample + length(cue_sound)-1) = snd_total(phase_start_sample + cue_sample : phase_start_sample + cue_sample + length(cue_sound)-1) + cue_sound';
+                snd_total(phase_start_sample + cue_sample : phase_start_sample + cue_sample + length(cue_sound)-1, 1) = snd_total(1, phase_start_sample + cue_sample : phase_start_sample + cue_sample + length(cue_sound)-1, 1) + cue_sound';
                 cues(phase_start_sample + cue_sample) = 1;
             end
         end
@@ -70,10 +71,10 @@ elseif params.method == "intervals"
     min_int = params.intertarget_interval_range(1)
     sample = 1;
     
-    while sample < length(snd_total) - 2*max_int*Fs
+    while sample < size(snd_total,1) - 2*max_int*Fs
         sample = sample + floor(Fs*((max_int - min_int)*rand() + min_int))
         targets(sample) = 1;
-        snd_total(sample : sample + length(target_sound)-1) = snd_total(sample : sample + length(target_sound)-1) + target_sound';
+        snd_total(sample : sample + length(target_sound)-1, 1) = snd_total(sample : sample + length(target_sound)-1, 1) + target_sound;
             
     end
     
@@ -90,11 +91,13 @@ elseif params.method == "intervals"
                 
         cue_sample = all_targets(target_num) - max(floor((params.SDs(current_phase)*Fs*randn(1) + Fs*params.means(current_phase))),0);
         if cue_sample>0
-            snd_total(cue_sample : cue_sample + length(cue_sound)-1) = snd_total(cue_sample : cue_sample + length(cue_sound)-1) + cue_sound';
+            snd_total(cue_sample : cue_sample + length(cue_sound)-1, 1) = snd_total(cue_sample : cue_sample + length(cue_sound)-1, 1) + cue_sound;
             cues(cue_sample) = 1;
         end
     end
     
 end
+
+snd_total(:,2) = cumsum(cues) - cumsum(targets);
 
 end

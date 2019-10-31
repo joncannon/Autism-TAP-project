@@ -9,18 +9,21 @@ intervals = zeros(1,n_events+1)+period;
 counter = 0;
 for i=1:n_events
     if (rand()>deviant_rate || i<=lead_in || counter>0)
-        identities(i) = 0;
+        identities(i) = params.standard_code;
         counter = counter-1;
     else
-        identities(i) = 1;
+        identities(i) = params.deviant_code;
         counter = allowable_distance;
     end
 
 end
-identities(end)= 2;
+identities(end)= target_code;
 snd_total = master_stim_maker(filename, intervals, identities, params);
 key=struct();
 key.code = identities;
 key.type = 'deviant';
+key.period = period;
 
-save(strcat(filename, '.mat'),'key')
+if params.save_separate
+    save(strcat(filename, '.mat'),'key');
+end

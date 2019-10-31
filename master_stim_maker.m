@@ -28,16 +28,15 @@ for i=1:length(intervals)
     
     if identities(i) == 2
         snd(1:target_samples,1) = target;
-        
+        snd(1:1000, 2)=params.eeg_amplitude;
     elseif identities(i) == 1
         snd(1:deviant_samples,1) = deviant;
-        
+        snd(1:1000, 2)=params.eeg_amplitude;
     else
         snd(1: tick_samples, 1) = tick;
-        
+        snd(1:1000, 2)=params.eeg_amplitude;
     end
     
-    snd(1:1000, 2)=1;
     %x_beep = 1:(metroduration * Fs);
     %beep = sin(x_beep * 2*pi * tonefreq / Fs);
     %snd(Fs * (i-1) * metroperiod + 1: Fs * (i-1) * metroperiod + metroduration * Fs, 1) = beep;
@@ -46,4 +45,7 @@ for i=1:length(intervals)
 
 end
 
-audiowrite(strcat(filename, '.wav'),snd_total,Fs);
+if params.wav_separate
+    audiowrite(strcat(filename, '.wav'),snd_total,Fs);
+end
+EEG

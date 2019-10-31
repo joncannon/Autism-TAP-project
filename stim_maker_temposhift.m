@@ -9,3 +9,7 @@ key.type = 'temposhift';
 key.magnitude = ms_shift;
 
 snd_total=master_stim_maker(filename, intervals, identities, params);
+
+if params.save_separate
+    save(strcat(filename, '.mat'),'key');
+end

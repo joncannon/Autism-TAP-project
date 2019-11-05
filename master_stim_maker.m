@@ -1,51 +1,25 @@
-function snd_total=master_stim_maker(filename, intervals, identities, params)
+function [snd_total, code]=master_stim_maker(filename, intervals, identities, params)
 
 % interval = vector
 
 snd_total=[];
+code = zeros(length(intervals));
 
 Fs = params.Fs;
-tick = params.tick;
-tick_samples = size(tick,1);
 
-if isfield(params, 'deviant')
-    deviant = params.deviant;
-else
-    deviant = zeros(10,1);
-end
-deviant_samples = size(deviant,1);
-
-if isfield(params, 'target')
-    target = params.target;
-else
-    target = zeros(10,1);
-end
-target_samples = size(target,1);
+sound_list = params.sound_list;
 
 for i=1:length(intervals)
-    metroperiod = intervals(i);
-    snd = zeros(floor(Fs * metroperiod),2);
+
+    snd = zeros(floor(Fs * intervals(i)),2);
+    snd_num = mod(identities(i), 10);
     
-    if identities(i) == 2
-        snd(1:target_samples,1) = target;
-        snd(1:1000, 2)=params.eeg_amplitude;
-    elseif identities(i) == 1
-        snd(1:deviant_samples,1) = deviant;
-        snd(1:1000, 2)=params.eeg_amplitude;
-    else
-        snd(1: tick_samples, 1) = tick;
-        snd(1:1000, 2)=params.eeg_amplitude;
-    end
-    
-    %x_beep = 1:(metroduration * Fs);
-    %beep = sin(x_beep * 2*pi * tonefreq / Fs);
-    %snd(Fs * (i-1) * metroperiod + 1: Fs * (i-1) * metroperiod + metroduration * Fs, 1) = beep;
+    snd(1:length(sound_list{snd_num}), 1) = sound_list{snd_num};
+    snd(1:params.sync_samples, 2)=params.eeg_amplitude;
     
     snd_total=vertcat(snd_total,snd);
-
 end
 
 if params.wav_separate
     audiowrite(strcat(filename, '.wav'),snd_total,Fs);
 end
-EEG

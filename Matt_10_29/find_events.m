@@ -5,13 +5,13 @@ counter = 0;
 look_ahead = 14;
 jump_ahead = 25;
 while i < size(EEG.data, 2)-look_ahead
-    if EEG.data(end, i)<-1*10^5
+    if EEG.data(end, i)<?
         counter = counter+1;
         event2(end+1).latency = i;
         event2(end).duration = 0;
         event2(end).chanindex = 0;
         event2(end).urevent = counter;
-        if EEG.data(end, i+look_ahead)>1*10^5
+        if EEG.data(end, i+look_ahead)>?
             event2(end).type = 1;
         else
             event2(end).type = 4;

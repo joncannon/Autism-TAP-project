@@ -1,15 +1,19 @@
-function [snd_total, key]=stim_maker_phaseshift(filename, ICI, n_before, n_after, ms_shift, params)
+function block=stim_maker_phaseshift(filename, ICI, n_before, n_after, ms_shift, trial_tag, params)
 
 intervals = horzcat(zeros(1,n_before)+ICI, ICI+ms_shift, zeros(1,n_after)+ICI);
-identities = zeros(size(intervals));
+identities = zeros(size(intervals))+params.standard_index;
 
-key = struct();
-key.code = horzcat(zeros(1,n_before), [3], zeros(1,n_after+1));
-key.type = 'phaseshift';
-key.magnitude = ms_shift;
+block = struct();
+block.snd_total = snd_total;
 
-snd_total=master_stim_maker(filename, intervals, identities, params);
+block.code = horzcat(zeros(1,n_before)+params.standard_index, [params.shift_code], zeros(1,n_after+1)+params.standard_index) + 100*trial_tag;
+block.type = 'phaseshift';
+block.magnitude = ms_shift;
+block.period = ICI;
+
+block.sound=master_stim_maker(filename, intervals, identities, params);
+block.params = params;
 
 if params.save_separate
-    save(strcat(filename, '.mat'),'key');
+    save(strcat(filename, '.mat'),'block');
 end

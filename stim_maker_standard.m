@@ -1,4 +1,4 @@
-function block=stim_maker_omission(filename, period, n_events, omission_rate, end_target, trial_tag, params)
+function block=stim_maker_standard(filename, period, n_events, end_target, trial_tag, params)
 
 % INPUTS:
 % . filename    - unique file identifier for wav, save, etc.
@@ -11,17 +11,12 @@ lead_in = params.lead_in;
 identities = zeros(1, n_events);
 intervals = zeros(1,n_events)+period;
 
-counter = 0;
 
 for i=1:n_events
     if i==n_events && end_target
         identities(i) = params.target_index;
-    elseif (rand()>omission_rate || i<=lead_in || counter>0)
-        identities(i) = params.standard_index;
-        counter = counter-1;
     else
-        identities(i) = params.omission_index;
-        counter = allowable_distance;
+        identities(i) = params.standard_index;
     end 
 end
 
@@ -31,7 +26,7 @@ block.sound=master_stim_maker(filename, intervals, identities, params);
 block.params = params;
 
 block.code = identities + 100*trial_tag;
-block.type = 'omission';
+block.type = 'standard';
 block.period = period;
 
 if params.save_separate

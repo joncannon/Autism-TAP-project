@@ -4,6 +4,7 @@ intervals = horzcat(zeros(1,n_before)+ICI, zeros(1,n_after)+ICI+ms_shift);
 identities = zeros(size(intervals))+params.standard_index;
 
 block = struct();
+block.trial_tag = trial_tag;
 block.code = horzcat(zeros(1,n_before)+params.standard_index, zeros(1,n_after+1)+params.tempo_code) + 100*trial_tag;
 block.type = 'temposhift';
 block.magnitude = ms_shift;

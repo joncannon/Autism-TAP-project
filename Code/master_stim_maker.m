@@ -15,7 +15,7 @@ for i=1:length(intervals)
     snd_num = mod(identities(i), 10);
     
     snd(1:length(sound_list{snd_num}), 1) = sound_list{snd_num};
-    snd(1:params.sync_samples, 2)=params.eeg_amplitude;
+    snd(1:params.sync_samples, 2)=params.sync_amplitude;
     
     snd_total=vertcat(snd_total,snd);
 end

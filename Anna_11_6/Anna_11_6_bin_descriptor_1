@@ -1,0 +1,11 @@
+bin 1
+All standard clicks, listening
+.{101;201;301;2101;2201;2301;3101;3201;3301}
+
+bin 2
+All deviant clicks, listening
+.{102;202;302;2102;2202;2302;3102;3202;3302}
+
+bin 3
+All omissionss, listening
+.{104;204;304;2104;2204;2304;3104;3204;3304}

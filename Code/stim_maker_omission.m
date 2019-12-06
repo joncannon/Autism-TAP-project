@@ -30,6 +30,7 @@ block = struct();
 block.sound=master_stim_maker(filename, intervals, identities, params);
 block.params = params;
 
+block.trial_tag = trial_tag;
 block.code = identities + 100*trial_tag;
 block.type = 'omission';
 block.period = period;

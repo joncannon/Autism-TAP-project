@@ -53,12 +53,12 @@ params.listen_omission_tag = 3;
 params.tap_omission_tag = 4;
 params.deviant_control_tag = 5;
 params.free_tap_tag = 6;
-params.contingency_tag = 7;
+params.contingency_tag = 6;
 
 params.sync_amplitude = 0.005;
 params.sync_samples = 200;
 params.intertrial_amplitude = .0025;
-params.intertrial_time = 5;
+params_intertrial_time = 5;
 
 listening_blocks = {};
 tapping_blocks = {};
@@ -86,6 +86,7 @@ for i = 1:length(all_periods)
     for j=1:2
         trial_tag = i+10*params.listen_standard_tag;
         block = stim_maker_standard(strcat(filepath, 'listen_metronome_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), true, trial_tag, params);
+        block.trial_tag = trial_tag;
         block.instruction_type = 'listen';
         block.instructions = rxn_inst;
         listening_blocks{end+1} = block;

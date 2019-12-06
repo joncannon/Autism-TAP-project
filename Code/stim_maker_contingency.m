@@ -23,6 +23,7 @@ for p = 1:length(phases)
     end
 end
 
+block.trial_tag = trial_tag;
 block.code = block.code + 100*trial_tag;
 block.intervals = intervals;
 block.sound = master_stim_maker(filename, intervals, identities, params);

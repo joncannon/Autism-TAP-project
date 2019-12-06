@@ -3,11 +3,19 @@ file_tag = 'Isaac_2_4'
 tap_audio = audioread(strcat(file_tag, '_tap.wav'));
 beep_audio = audioread(strcat(file_tag, '_rerecording.wav'));
 
-beep_threshold = .75;
-tap_threshold = .2;
+d = designfilt('bandstopiir','FilterOrder',2, ...
+               'HalfPowerFrequency1',59,'HalfPowerFrequency2',61, ...
+               'DesignMethod','butter','SampleRate',44100);
 
-wav_beep_times = get_times(beep_audio, beep_threshold);
-wav_tap_times = get_times(tap_audio, tap_threshold);
+tap_audio_filt = filtfilt(d,tap_audio(:,1));
+
+%%
+
+beep_threshold = .75;
+tap_threshold = .06;
+
+wav_beep_times = get_times(beep_audio(:,1), beep_threshold);
+wav_tap_times = get_times(tap_audio_filt, tap_threshold);
 
 block_struct = divide_data(wav_beep_times, wav_tap_times, all_blocks_shuffled)
 
@@ -43,6 +51,7 @@ end
 event_count = 0;
 
 for i = 1:length(block_struct)
+    i
     block_struct{i}.eeg_beep_times = [];
     type = block_struct{i}.type
     length(block_struct{i}.code)
@@ -66,7 +75,7 @@ for i = 1:length(block_struct)
     end
 end
 
-%%
+%% Remove later
 
 for i = 1:length(block_struct)
     block_struct{i}.trial_tag = floor(block_struct{i}.code(1)/100);

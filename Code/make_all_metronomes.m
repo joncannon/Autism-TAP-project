@@ -31,7 +31,7 @@ tick = audioread('../stimulus_components/wood_tick.wav');
 params.sound_list{1} = 0.2*tick(:,1);
 params.standard_index = 1;
 
-params.sound_list{2} = .2*resample(tick(:,1), 4,5);
+params.sound_list{2} = .2*resample(tick(:,1), 5,4);
 params.deviant_index = 2;
 
 target = audioread('../stimulus_components/target_beep.wav');

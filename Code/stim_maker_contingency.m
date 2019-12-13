@@ -11,7 +11,7 @@ for p = 1:length(phases)
     while counter<phase.n_targets
         identities(end+1) = params.standard_index;
         if rand()>fake_rate
-            intervals(end+1) = (phase.range(2) - phase.range(1))*rand() + phase.range(1);
+            intervals(end+1) = phase.options(ceil(rand()*length(phase.options)));
             identities(end+1) = params.target_index;
             counter = counter+1;
             block.code(end+1:end+2)= [1, 2];

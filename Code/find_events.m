@@ -1,7 +1,11 @@
-file_tag = 'Isaac_2_4'
+file_tag = 'Anna_11_6'
 
 tap_audio = audioread(strcat(file_tag, '_tap.wav'));
 beep_audio = audioread(strcat(file_tag, '_rerecording.wav'));
+
+%%% ONLY ANNA
+beep_audio(50274000:51597000, :) = 0;
+%%%REMOVE
 
 d = designfilt('bandstopiir','FilterOrder',2, ...
                'HalfPowerFrequency1',59,'HalfPowerFrequency2',61, ...
@@ -10,8 +14,9 @@ d = designfilt('bandstopiir','FilterOrder',2, ...
 tap_audio_filt = filtfilt(d,tap_audio(:,1));
 
 %%
+beep_threshold = .1 % Anna
 
-beep_threshold = .75;
+% beep_threshold = .75% Isaac;
 tap_threshold = .06;
 
 wav_beep_times = get_times(beep_audio(:,1), beep_threshold);
@@ -21,28 +26,35 @@ block_struct = divide_data(wav_beep_times, wav_tap_times, all_blocks_shuffled)
 
 %%
 
-sync_channel = 43;
+sync_channel = 41;
 
 event2 = [];
 i = 2;
 counter = 0;
-look_ahead = floor(params.sync_samples/60);
+%look_ahead = floor(params.sync_samples/60);
+look_ahead = 6;
+
 jump_ahead = 100;
+end_counter = 0;
 while i < size(EEG.data, 2)-look_ahead
     if EEG.data(sync_channel, i)-EEG.data(sync_channel, i-1)>500
         counter = counter+1;
+            
         event2(end+1).latency = i;
         event2(end).duration = 0;
         event2(end).chanindex = 0;
         event2(end).urevent = counter;
-        if EEG.data(sync_channel, i+look_ahead)<EEG.data(sync_channel, i-look_ahead)-1000
+        %if EEG.data(sync_channel, i+look_ahead)<EEG.data(sync_channel, i-look_ahead)-1000
+        if EEG.data(sync_channel, i+look_ahead)<EEG.data(sync_channel, i-look_ahead)-500
             event2(end).type = 0;
+            end_counter = end_counter+1
         else
             event2(end).type = params.end_code;
-            length(event2)
+            
             i = i+floor((params.intertrial_time+.1)*512);
         end
         i = i+jump_ahead;
+        'boing'
     end
     i = i+1;
 end

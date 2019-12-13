@@ -154,15 +154,18 @@ free_block.instructions = free_inst;
 phase_types = {};
 phase_types{1} = struct();
 phase_types{2} = struct();
-phase_types{1}.n_targets = 20;
-phase_types{2}.n_targets = 20;
-phase_types{1}.range = [.3,1.1];
-phase_types{2}.range = [.6,.8];
-phases = {phase_types{1}, phase_types{2}, phase_types{1}, phase_types{2}, phase_types{1}, phase_types{2}, phase_types{1}, phase_types{2}};
+phase_types{1}.n_targets = 50;
+phase_types{2}.n_targets = 50;
+phase_types{1}.cue_interval = .7;
+phase_types{2}.cue_interval = .7;
+phase_types{1}.cue_rate = .4;
+phase_types{2}.cue_rate = .8;
+
+phases = {phase_types{1}, phase_types{2}, phase_types{1}};
 
 intertrial_range = [1, 1.8];
 trial_tag = 10*params.contingency_tag;
-contingency_block = stim_maker_contingency(strcat(filepath, 'contingency_two_phase_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), .25, phases, intertrial_range, trial_tag, params);
+contingency_block = stim_maker_pawan_contingency(strcat(filepath, 'contingency_three_phase_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), .25, phases, intertrial_range, trial_tag, params);
 contingency_block.instructions = vertcat( init_rxn_inst, rxn_inst);
 
 'c done'

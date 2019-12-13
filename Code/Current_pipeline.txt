@@ -1,0 +1,30 @@
+-------
+
+Import with mastoid reference
+
+Rereference:
+unref = EEG.data(40,:);
+unref = repmat(unref, [41,1]);
+EEG.data = EEG.data - unref;
+
+THIS IS ONLY USEFUL FOR COMMON MODE?
+reref = mean(EEG.data(1:32,:), 1);
+reref = repmat(reref, [32,1]);
+EEG.data(1:32,:) = EEG.data(1:32,:) - reref;
+
+Exclude bad channels using Channel Locations > uncheck data array box
+Change channel types for ERP
+
+Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.5,'hicutoff',80,'chantype',{'EEG'});
+    % Lower hi-cut for just ERPs Ð 40? 30?
+
+Use find_events, then pop_creabasiceventlist( EEG , 'AlphanumericCleaning', 'on', 'BoundaryNumeric', { -99 }, 'BoundaryString', { 'boundary' }, 'Eventlist', '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Isaac_2_4/event_list_1.txt' );
+Import bins
+Perform ICA on full set: pop_runica(EEG, 'icatype', 'runica', 'extended',1,'interrupt','on');
+Remove eyes (and widespread noise?)
+Epoch -1000:1000
+    % Pre baseline???
+
+
+Anna
+5 25 31 4 26 27 30

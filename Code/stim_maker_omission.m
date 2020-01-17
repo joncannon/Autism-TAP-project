@@ -14,15 +14,20 @@ intervals = zeros(1,n_events)+period;
 counter = 0;
 
 for i=1:n_events
-    if i==n_events && end_target
-        identities(i) = params.target_index;
-    elseif (rand()>omission_rate || i<=lead_in || counter>0)
+
+    if (rand()>omission_rate || i<=lead_in || counter>0)
         identities(i) = params.standard_index;
         counter = counter-1;
     else
         identities(i) = params.omission_index;
         counter = allowable_distance;
     end 
+end
+
+if end_target
+    intervals(end) = params.target_delay*period;
+    intervals(end+1) = 1;
+    identities(end+1) = params.target_index;
 end
 
 block = struct();

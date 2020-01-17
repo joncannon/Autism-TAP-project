@@ -2,29 +2,60 @@
 
 Import with mastoid reference
 
-Rereference:
+
+hi-pass EEG sync channel: 40Hz
+Import (or find) events and bins
+
+Unreference the non-head channels
 unref = EEG.data(40,:);
-unref = repmat(unref, [41,1]);
-EEG.data = EEG.data - unref;
 
-THIS IS ONLY USEFUL FOR COMMON MODE?
-reref = mean(EEG.data(1:32,:), 1);
-reref = repmat(reref, [32,1]);
-EEG.data(1:32,:) = EEG.data(1:32,:) - reref;
+% 40 % -- This should be GSR2 –- there was no GSR2 recorded, so it should be zero, but all the non-head channels get screwed up when you import with mastoid references, so this is supposed to fix them.
 
-Exclude bad channels using Channel Locations > uncheck data array box
-Change channel types for ERP
+unref = repmat(unref, [size(EEG.data, 1)-34,1]);
+EEG.data(35:end, :) = EEG.data(35:end, :) - unref;
 
-Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.5,'hicutoff',80,'chantype',{'EEG'});
-    % Lower hi-cut for just ERPs – 40? 30?
+Exclude bad channels
+       Possibly using pop_select(EEG, 'nochannel', [x])
+       …or just by selecting the data without that channel.
+(not including channels with eye (or other) muscle artifacts that might come out in ICA)
+Change channel types to specify EEG, EMG, eyes, GSR, and SYNC in Edit > Channel Locations menu
 
-Use find_events, then pop_creabasiceventlist( EEG , 'AlphanumericCleaning', 'on', 'BoundaryNumeric', { -99 }, 'BoundaryString', { 'boundary' }, 'Eventlist', '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Isaac_2_4/event_list_1.txt' );
-Import bins
-Perform ICA on full set: pop_runica(EEG, 'icatype', 'runica', 'extended',1,'interrupt','on');
-Remove eyes (and widespread noise?)
+Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.1,'hicutoff',80,'chantype',{'EEG'});
+    % Maybe lower hi-cut for just ERPs – 40? 30?
+	%filter eyes too!
+
 Epoch -1000:1000
     % Pre baseline???
 
+Exclude epochs with bad global movement artifacts (not including eyes)
 
-Anna
+Perform ICA on data set with just EEG and eyes: pop_runica(EEG, 'icatype', 'runica', 'extended',1,'interrupt','on');
+Remove eyes (and widespread noise?)
+
+OPTIONAL:
+Get current-source-density (CSD) ERPlagb > Datatype transformations > Compute CSD from EEG
+(Save a version that doesn’t have CSD)
+
+
+Remove epochs that suck (Gisela: look at data, experiment with parameters, figure out what parameters remove data that’s obviously weird but not other stuff)
+
+
+
+Anna good channels:
 5 25 31 4 26 27 30
+
+
+Recommended by EEG lab:
+1. High-pass filter the data to remove slow drifts (e.g., half amplitude cutoff of 0.1 Hz, 12 dB/octave).  This should be done on long periods of continuous EEG to avoid edge artifacts, and any offset should be removed if a high-pass filter was not applied during data acquisition.  In rare cases, you may also want to apply a mild low-pass filter at this stage (e.g., half amplitude cutoff of 30 Hz, 12-24 dB/octave).
+2. Perform artifact correction, if desired.  Periods of “crazy” data should be deleted prior to the artifact correction process if you use ICA (but don’t delete ordinary artifacts, such as eyeblinks, prior to artifact correction).
+3. Re-reference the data, if desired.  For example, you may want to re-reference to the average of the mastoids at this point.  In addition, you will probably want to create bipolar EOG channels (e.g., lower minus upper and left minus right) at this point to facilitate artifact rejection.  You can also re-reference the data again after averaging to see how the waveforms look with different references.
+4. Epoch the continuous data to create single-trial EEG segments (e.g., from -200 to +800 ms).  In most systems, you will perform baseline correction at this stage (which is essential if you will be using an absolute voltage threshold in the next stage).
+5. Perform artifact rejection. Many systems require that you perform artifact after epoching, so I have put this step after epoching.  However, it works just as well to perform artifact rejection on the continuous EEG, prior to epoching, if your system allows it.
+6. Average the single-trial EEG epochs to create single-subject averaged ERP waveforms. 
+7. Plot the ERP waveforms to make sure that the artifact correction and rejection processes worked properly.  You may want to apply a low-pass filter (e.g., half amplitude cutoff = 30 Hz, slope = 12-24 dB/octave) before plotting so that you can see the data more clearly.  However, I would ordinarily recommend applying the subsequent steps to the unfiltered data. If necessary, average together different trial types if they weren’t already combined during the initial averaging process (e.g., to collapse across factors used for counterbalancing).
+8. Make difference waves, if desired.  Note that averaging across trial types and making difference waves are linear operations, and mild low-pass filtering is either linear or nearly linear, so you can do these steps in any order.
+9. If you are averaging multiple waveforms together and/or making difference waves, you should plot the waveforms from each step so that you can verify that the averaging and differencing processes are working properly.
+10. Make grand averages across subjects (and possibly leave-one-out grand averages for jackknifing).
+11. Measure amplitudes and latencies (from the single-subject ERPs in most cases, but from the leave-one-out grand averages if you are using the jackknife approach). If you are measuring peak amplitude or peak latency, you should usually apply a mild low-pass filter first (e.g., half amplitude cutoff = 20-30 Hz, slope = 12-24 dB/octave).  If you are measuring onset or offset latency, you should usually apply a more severe filter first (e.g., half amplitude cutoff = 10-20 Hz, slope = 12-24 dB/octave).  If you are measuring mean amplitude, integral amplitude, or area amplitude, it is best to avoid low-pass filtering the data (except the antialiasing filter that was applied during the EEG recording).
+
+

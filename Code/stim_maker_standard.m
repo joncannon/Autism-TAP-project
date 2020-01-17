@@ -13,11 +13,13 @@ intervals = zeros(1,n_events)+period;
 
 
 for i=1:n_events
-    if i==n_events && end_target
-        identities(i) = params.target_index;
-    else
-        identities(i) = params.standard_index;
-    end 
+    identities(i) = params.standard_index; 
+end
+
+if end_target
+    intervals(end) = params.target_delay*period;
+    intervals(end+1) = 1;
+    identities(end+1) = params.target_index;
 end
 
 block = struct();

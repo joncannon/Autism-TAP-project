@@ -71,6 +71,8 @@ i = 2;
 counter = 1;
 look_ahead = 2*params.sync_eeg_samples;
 
+jump_ahead = 100;
+
 events_w_taps = [];
 collecting = false;
 
@@ -84,9 +86,7 @@ while i < size(EEG.data, 2)-look_ahead
                     block_struct_w_eeg{n_block}.complete = true;
                 end
                 
-                if ~collecting
-                    n_block = n_block+1;
-                end
+                if ~collecti
             
                 block_struct{n_block}.eeg_tap_times = block_struct{i}.wav_tap_times + block_struct{i}.eeg_beep_times(1) - block_struct{i}.wav_beep_times(1);    
                 block_struct{n_block}.eeg_tap_latencies = floor(block_struct{n_block}.eeg_tap_times*512);
@@ -114,13 +114,14 @@ while i < size(EEG.data, 2)-look_ahead
                 n_block = n_block + 1;
                 collecting = true;
             end
-        else
-            if collecting
-                block_struct_w_eeg{n_block}.eeg_beep_latencies(end+1) = i-1;
-                block_struct_w_eeg{n_block}.eeg_beep_times(end+1) = (i-1)/512;
-            end
         end
-        i = i+3*look_ahead;
+
+            
+        else
+            block_struct_w_eeg{n_block}.eeg_beep_latencies(end+1) = i-1;
+            block_struct_w_eeg{n_block}.eeg_beep_times(end+1) = (i-1)/512;
+        end
+        i = i+jump_ahead;
         'boing'
     end
     i = i+1;

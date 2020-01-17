@@ -10,11 +10,11 @@ all_event_bins = cell(1, n_epochs);
 transform_means = cell(n_channels, n_bins);
 bin_counter = zeros(1,n_bins);
 
-fb = cwtfilterbank('SignalLength',n_samples,'SamplingFrequency',Fs,'FrequencyLimits',[1 50]);
+fb = cwtfilterbank('SignalLength',n_samples,'SamplingFrequency',Fs,'FrequencyLimits',[1 50], 'Wavelet','Morse');
 
 for j = 1:n_channels
     for b = 1:n_bins
-        transform_means{j,b} = zeros(71, n_samples);
+        transform_means{j,b} = zeros(50, n_samples);
     end
 end
 

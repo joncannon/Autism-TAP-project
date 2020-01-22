@@ -9,6 +9,8 @@ block.snd_total = snd_total;
 block.trial_tag = trial_tag;
 block.code = horzcat(zeros(1,n_before)+params.standard_index, [params.shift_code], zeros(1,n_after+1)+params.standard_index) + 100*trial_tag;
 block.type = 'phaseshift';
+block.intervals = intervals;
+block.identities = identities;
 block.magnitude = ms_shift;
 block.period = ICI;
 

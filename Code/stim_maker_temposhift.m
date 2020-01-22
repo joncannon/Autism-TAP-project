@@ -8,6 +8,8 @@ block.trial_tag = trial_tag;
 block.code = horzcat(zeros(1,n_before)+params.standard_index, zeros(1,n_after+1)+params.tempo_code) + 100*trial_tag;
 block.type = 'temposhift';
 block.magnitude = ms_shift;
+block.intervals = intervals;
+block.identities = identities;
 block.period = ICI;
 
 block.sound=master_stim_maker(filename, intervals, identities, params);

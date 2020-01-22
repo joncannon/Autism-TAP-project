@@ -20,7 +20,7 @@ Exclude bad channels
 (not including channels with eye (or other) muscle artifacts that might come out in ICA)
 Change channel types to specify EEG, EMG, eyes, GSR, and SYNC in Edit > Channel Locations menu
 
-Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.1,'hicutoff',80,'chantype',{'EEG'});
+Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.1,'hicutoff',80,'chantype',{'EEG', 'EYE'});
     % Maybe lower hi-cut for just ERPs Ð 40? 30?
 	%filter eyes too!
 

@@ -38,6 +38,8 @@ block.params = params;
 block.trial_tag = trial_tag;
 block.code = identities + 100*trial_tag;
 block.type = 'deviant';
+block.intervals = intervals;
+block.identities = identities;
 block.period = period;
 
 if params.save_separate

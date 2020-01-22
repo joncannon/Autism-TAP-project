@@ -29,6 +29,8 @@ block.params = params;
 
 block.trial_tag = trial_tag;
 block.code = identities + 100*trial_tag;
+block.intervals = intervals;
+block.identities = identities;
 block.type = 'standard';
 block.period = period;
 

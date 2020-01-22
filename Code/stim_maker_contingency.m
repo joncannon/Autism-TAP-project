@@ -26,6 +26,7 @@ end
 block.trial_tag = trial_tag;
 block.code = block.code + 100*trial_tag;
 block.intervals = intervals;
+block.identities = identities;
 block.sound = master_stim_maker(filename, intervals, identities, params);
 block.type = 'contingency';
 

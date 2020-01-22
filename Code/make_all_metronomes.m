@@ -15,52 +15,8 @@ all_filewords = {'600', '700', '800'};
 mkdir(strcat('../stimulus_sequences/', datestr(clock, 'dd-mmm-yyyy HH+MM+SS')));
 filepath = strcat('../stimulus_sequences/', datestr(clock, 'dd-mmm-yyyy HH+MM+SS'), '/');
 
-params = struct();
-
+params = default_params();
 params.all_periods = all_periods;
-
-params.lead_in=4;
-params.allowable_distance = 3;
-
-params.save_separate = false;
-params.wav_separate = false;
-params.Fs = 44100;
-params.sound_list = {};
-
-tick = audioread('../stimulus_components/wood_tick.wav');
-params.sound_list{1} = 0.2*tick(:,1);
-params.standard_index = 1;
-
-params.sound_list{2} = .2*resample(tick(:,1), 5,4);
-params.deviant_index = 2;
-
-target = audioread('../stimulus_components/target_beep.wav');
-envelope = min(size(target,1)/2-abs((1:size(target,1)) - floor(size(target,1)/2)), .005*44100)./(.005*44100);
-params.sound_list{3} = 0.2*target(:,1).* envelope';
-params.target_index = 3;
-
-params.sound_list{4} = 0;
-params.omission_index = 4;
-
-params.end_code = 5;
-
-params.shift_code = 10;
-params.tempo_code = 20;
-
-params.listen_standard_tag = 0;
-params.tap_standard_tag = 1;
-params.listen_deviant_tag = 2;
-params.listen_omission_tag = 3;
-params.tap_omission_tag = 4;
-params.deviant_control_tag = 5;
-params.free_tap_tag = 6;
-params.contingency_tag = 7;
-
-params.target_delay = 6;
-
-params.sync_amplitude = 0.02;
-params.sync_eeg_samples = 3;
-params.intertrial_time = 5;
 
 listening_blocks = {};
 tapping_blocks = {};

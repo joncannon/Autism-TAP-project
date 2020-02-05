@@ -5,14 +5,20 @@ function block=stim_maker_standard(filename, period, n_events, end_target, trial
 % . period      - inter-click interval
 % . n_events    - number
 
+
 allowable_distance = params.allowable_distance;
 lead_in = params.lead_in;
 
 identities = zeros(1, n_events);
-intervals = zeros(1,n_events)+period;
+intervals = zeros(1,n_events);
 
 
 for i=1:n_events
+    if isa(period, 'function_handle')         
+        intervals(i) = period();
+    else
+        intervals(i) = period;
+    end
     identities(i) = params.standard_index; 
 end
 

@@ -20,8 +20,9 @@ function params = default_params()
     params.deviant_index = 2;
 
     x_beep = 1:(.2 * 44100);
+    n_samples = length(x_beep);
     
-    envelope = min(length(x_beep)/2-abs((1:length(x_beep)) - floor(length(x_beep)/2)), .005*44100)./(.005*44100);
+    envelope = min(n_samples/2-abs((1:n_samples) - floor(n_samples/2)), .005*44100)./(.005*44100);
 
     beep1 = .02*sin(x_beep * 2*pi * 770 / 44100).* envelope;
     % beep2 = .02*sin(x_beep * 2*pi * 790 / 44100).* envelope;
@@ -37,26 +38,57 @@ function params = default_params()
     lowfreq = 330;
     hifreq = 880;
     logmeanfreqs = log(lowfreq): (log(hifreq)-log(lowfreq))/3 : log(hifreq);
-    logfreqspreads = .025 : .025 : .1;
-
-    params.n_difficulties = length(logfreqspreads);
-    params.n_pitches = length(logmeanfreqs);
-    params.get_id = @(pitch, difficulty, direction) 100*pitch + 10*difficulty + direction + 8;
-
-    for i = 1:length(logmeanfreqs)
-        for j = 1:length(logfreqspreads)
-
-            risingfreq = exp(logmeanfreqs(i) + 2*logfreqspreads(j)*(x_beep/(length(x_beep))-.5));
-            beepup = .02*sin(x_beep * 2*pi .* risingfreq / 44100).* envelope;
-            id = params.get_id(i,j,0);
-            params.sound_list{id} = beepup;
-
-            beepdown = flip(beepup);
-            id = params.get_id(i,j,1);
-            params.sound_list{id} = beepdown;
+    logfreqspreads = .005 : .005 : .025;
+    logvolspreads = 1.5 : .5 : 1.5;
+    
+    volumes = [0, exp(-9:-5)];
+    params.n_detect_pitches = length(logmeanfreqs);
+    params.n_detect_difficulties = length(volumes);
+    params.get_detect_id = @(pitch, difficulty) 100*pitch + 10*difficulty;
+    
+    for i = 1:params.n_detect_pitches
+        for j = 1:params.n_detect_difficulties
+            beep = volumes(j)*sin(x_beep * 2*pi * exp(logmeanfreqs(i)) / 44100).* envelope;
+            id = params.get_detect_id(i,j);
+            params.sound_list{id} = beep';
         end
     end
+    
+    params.n_discrim_difficulties = length(logfreqspreads);
+    params.n_discrim_pitches = length(logmeanfreqs);
+    params.get_discrim_id = @(pitch, difficulty, direction) 100*pitch + 10*difficulty + direction + 8;
+    
+    for i = 1:params.n_discrim_pitches
+        for j = 1:params.n_discrim_difficulties
 
+            risingfreq = exp(logmeanfreqs(i) + 2*logfreqspreads(j)*(x_beep/(n_samples)-.5));
+            beepup = .02*sin(x_beep * 2*pi .* risingfreq / 44100).* envelope;
+            id = params.get_discrim_id(i,j,0);
+            params.sound_list{id} = beepup';
+
+            beepdown = flip(beepup);
+            id = params.get_discrim_id(i,j,1);
+            params.sound_list{id} = beepdown';
+        end
+    end
+    
+    params.n_vdiscrim_difficulties = length(logvolspreads);
+    params.n_vdiscrim_pitches = length(logmeanfreqs);
+    params.get_vdiscrim_id = @(pitch, difficulty, direction) 100*pitch + 10*difficulty + direction + 1;
+    
+    for i = 1:params.n_vdiscrim_pitches
+        for j = 1:params.n_vdiscrim_difficulties
+
+            rising_envelope = envelope .* exp(logvolspreads(j)*((1:n_samples)-n_samples/2)/n_samples);
+            beepup = .02*sin(x_beep * 2*pi .* exp(logmeanfreqs(i)) / 44100).* rising_envelope;
+            id = params.get_vdiscrim_id(i,j,0);
+            params.sound_list{id} = beepup';
+
+            beepdown = flip(beepup);
+            id = params.get_vdiscrim_id(i,j,1);
+            params.sound_list{id} = beepdown';
+        end
+    end
 
 
     params.shift_code = 10;
@@ -71,6 +103,7 @@ function params = default_params()
     params.free_tap_tag = 6;
     params.contingency_tag = 7;
     params.discrim_tag = 8;
+    params.detect_tag = 9;
 
     params.target_delay = 6;
 

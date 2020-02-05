@@ -1,3 +1,8 @@
+
+% Script in progress. Didn't show me what I expected. I should probably be
+% doing this using built-in eeglab functionality, but not sure how to make
+% it work with ERPlab bins yet.
+
 n_epochs = size(EEG.data, 3);
 n_samples = size(EEG.data, 2);
 n_channels = size(EEG.data, 1);

@@ -1,4 +1,4 @@
-function block=stim_maker_contingency(filename, phases, intertrial_range, uncued_targets, trial_tag, params)
+function block=stim_maker_pawan_contingency(filename, phases, intertrial_range, uncued_targets, trial_tag, params)
 
 identities = [];
 intervals = [];

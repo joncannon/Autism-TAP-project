@@ -12,8 +12,11 @@
 
 all_periods = [.6, .7, .8];
 all_filewords = {'600', '700', '800'};
-mkdir(strcat('../stimulus_sequences/', datestr(clock, 'dd-mmm-yyyy HH+MM+SS')));
-filepath = strcat('../stimulus_sequences/', datestr(clock, 'dd-mmm-yyyy HH+MM+SS'), '/');
+
+timestamp = datestr(clock, 'dd-mmm-yyyy_HH+MM+SS');
+filepath = strcat('../stimulus_sequences/', 'discrim_', timestamp);
+mkdir(filepath);
+filepath = strcat(filepath, '/');
 
 params = default_params();
 params.all_periods = all_periods;
@@ -55,7 +58,7 @@ for i = 1:length(all_periods)
     i
     for j=1:2
         trial_tag = i+10*params.listen_standard_tag;
-        block = stim_maker_standard(strcat(filepath, 'listen_metronome_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), false, trial_tag, params);
+        block = stim_maker_standard(strcat(filepath, 'listen_metronome_', all_filewords{i}, '_', timestamp), all_periods(i), 25+floor(rand()*5), false, trial_tag, params);
         block.instruction_type = 'listen';
         block.instructions = [];%rxn_inst;
         listening_blocks{end+1} = block;
@@ -64,7 +67,7 @@ for i = 1:length(all_periods)
     
     for j=1:2
         trial_tag = i+10*params.tap_standard_tag;
-        block = stim_maker_standard(strcat(filepath, 'tap_metronome_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), true, trial_tag, params);
+        block = stim_maker_standard(strcat(filepath, 'tap_metronome_', all_filewords{i}, '_', timestamp), all_periods(i), 25+floor(rand()*5), true, trial_tag, params);
         block.instruction_type = 'tap';
         block.instructions = zeros(44100,2);
         tapping_blocks{end+1} = block;
@@ -72,13 +75,13 @@ for i = 1:length(all_periods)
     
     for j = 1:4
         trial_tag = i+10*params.listen_deviant_tag;
-        block = stim_maker_deviant(strcat(filepath, 'listen_deviant_metronome_', j, '_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), 0.3, false, trial_tag, params);
+        block = stim_maker_deviant(strcat(filepath, 'listen_deviant_metronome_', j, '_', all_filewords{i}, '_', timestamp), all_periods(i), 25+floor(rand()*5), 0.3, false, trial_tag, params);
         block.instruction_type = 'listen';
         block.instructions = [];%rxn_inst;
         listening_blocks{end+1} = block;
     end
     
-%     block = stim_maker_deviant(strcat(filepath, 'tap_deviant_metronome_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 45+floor(rand()*5), 0.1, params);
+%     block = stim_maker_deviant(strcat(filepath, 'tap_deviant_metronome_', all_filewords{i}, '_', timestamp), all_periods(i), 45+floor(rand()*5), 0.1, params);
 %     key.instruction_type = 'tap';
 %     tapping_blocks{end+1} = struct();
 %     tapping_blocks{end}.sound = vertcat(tapalong_inst, snd_total);
@@ -87,7 +90,7 @@ for i = 1:length(all_periods)
     
     for j = 1:4
         trial_tag = i+10*params.listen_omission_tag;
-        block = stim_maker_omission(strcat(filepath, 'listen_omission_metronome_', j, '_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), 0.3, false, trial_tag, params);
+        block = stim_maker_omission(strcat(filepath, 'listen_omission_metronome_', j, '_', all_filewords{i}, '_', timestamp), all_periods(i), 25+floor(rand()*5), 0.3, false, trial_tag, params);
         block.instruction_type = 'listen';
         block.instructions = [];%rxn_inst;
         listening_blocks{end+1} = block;
@@ -95,7 +98,7 @@ for i = 1:length(all_periods)
     
     for j=1:3
         trial_tag = i+10*params.tap_omission_tag; %%!!! go through old data and check this code
-        block = stim_maker_omission(strcat(filepath, 'tap_omission_metronome_', all_filewords{i}, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), 0.3, true, trial_tag, params);
+        block = stim_maker_omission(strcat(filepath, 'tap_omission_metronome_', all_filewords{i}, '_', timestamp), all_periods(i), 25+floor(rand()*5), 0.3, true, trial_tag, params);
         block.instruction_type = 'tap';
         block.instructions = zeros(44100,2);
         tapping_blocks{end+1} = block;
@@ -107,7 +110,7 @@ params.allowable_distance = 0;
 for i = 2:2
     for j = 1:2
         trial_tag = i+10*params.deviant_control_tag;
-        block = stim_maker_deviant(strcat(filepath, 'listen_deviant_metronome_control_', j, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), all_periods(i), 25+floor(rand()*5), 1, false, trial_tag, params);
+        block = stim_maker_deviant(strcat(filepath, 'listen_deviant_metronome_control_', j, '_', timestamp), all_periods(i), 25+floor(rand()*5), 1, false, trial_tag, params);
         block.type = 'all_deviant';
         block.instruction_type = 'listen';
         block.instructions = [];%rxn_inst;
@@ -117,7 +120,7 @@ end
 
 
 trial_tag = 10*params.free_tap_tag;
-free_block = stim_maker_freetap(strcat(filepath, 'free_tap_', j, '_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), 20, trial_tag, params);
+free_block = stim_maker_freetap(strcat(filepath, 'free_tap_', j, '_', timestamp), 20, trial_tag, params);
 free_block.instructions = free_inst;
 
 'free done'
@@ -140,7 +143,7 @@ phases = {phase_types{1}, phase_types{2}, phase_types{1}};
 
 intertrial_range = [1, 1.8];
 trial_tag = 10*params.contingency_tag;
-contingency_block = stim_maker_pawan_contingency(strcat(filepath, 'contingency_three_phase_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS')), phases, intertrial_range, true, trial_tag, params);
+contingency_block = stim_maker_pawan_contingency(strcat(filepath, 'contingency_three_phase_', timestamp), phases, intertrial_range, true, trial_tag, params);
 contingency_block.instructions = contingency_rxn_inst;
 
 'c done'
@@ -178,6 +181,6 @@ for i = 1:length(all_blocks)
     
 end
 
-audiowrite(strcat(filepath, 'all_metronomes_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS'), '.wav'), fullsound, 44100);
+audiowrite(strcat(filepath, 'all_metronomes_', timestamp, '.wav'), fullsound, 44100);
 
-save(strcat(filepath, 'all_metronomes.mat_', datestr(clock, 'dd-mmm-yyyy_HH+MM+SS'), '.mat'), 'fullsound', 'all_blocks', 'all_blocks_shuffled', 'shuffled_indices', 'params');
+save(strcat(filepath, 'all_metronomes.mat_', timestamp, '.mat'), 'fullsound', 'all_blocks', 'all_blocks_shuffled', 'shuffled_indices', 'params');

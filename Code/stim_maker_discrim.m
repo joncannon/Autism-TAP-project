@@ -1,19 +1,21 @@
-function block=stim_maker_discrim(filename, n_trials, cue_delay, intertrial_interval, trial_tag, params)
+function block=stim_maker_discrim(filename, n_trials, n_cues, cue_delay_generator, intertrial_interval_generator, trial_tag, params)
 
 identities = [];
 intervals = [];
 
 for i = 1:n_trials
-    identities(end+1) = params.standard_index;
-    intervals(end+1) = cue_delay;
+    for j = 1:n_cues
+        identities(end+1) = params.standard_index;
+        intervals(end+1) = cue_delay_generator(i);
+    end
     
     up_or_down = floor(rand()*2);
-    difficulty = floor(rand()*params.n_difficulties)+1;
-    pitch = floor(rand()*params.n_pitches)+1;
-    id = params.get_id(pitch, difficulty, up_or_down)
+    difficulty = floor(rand()*params.n_discrim_difficulties)+1;
+    pitch = floor(rand()*params.n_discrim_pitches)+1;
+    id = params.get_discrim_id(pitch, difficulty, up_or_down)
     
     identities(end+1) = id;
-    intervals(end+1) = intertrial_interval;
+    intervals(end+1) = intertrial_interval_generator(i);
 end
 
 block = struct();

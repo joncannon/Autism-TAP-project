@@ -37,12 +37,8 @@ Get current-source-density (CSD) ERPlagb > Datatype transformations > Compute CS
 (Save a version that doesn’t have CSD)
 
 
-Remove epochs that suck (Gisela: look at data, experiment with parameters, figure out what parameters remove data that’s obviously weird but not other stuff)
+Remove epochs that suck (llook at data, experiment with parameters, figure out what parameters remove data that’s obviously weird but not other stuff)
 
-
-
-Anna good channels:
-5 25 31 4 26 27 30
 
 
 Recommended by EEG lab:

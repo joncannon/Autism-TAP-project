@@ -2,17 +2,39 @@
 
 
 Recommended by EEG lab:
-1. High-pass filter the data to remove slow drifts (e.g., half amplitude cutoff of 0.1 Hz, 12 dB/octave).Ê This should be done on long periods of continuous EEG to avoid edge artifacts, and any offset should be removed if a high-pass filter was not applied during data acquisition.Ê In rare cases, you may also want to apply a mild low-pass filter at this stage (e.g., half amplitude cutoff of 30 Hz, 12-24 dB/octave).
-2. Perform artifact correction, if desired. ÊPeriods of ÒcrazyÓ data should be deleted prior to the artifact correction process if you use ICA (but donÕt delete ordinary artifacts, such as eyeblinks, prior to artifact correction).
-3. Re-reference the data, if desired.Ê For example, you may want to re-reference to the average of the mastoids at this point.Ê In addition, you will probably want to create bipolar EOG channels (e.g., lower minus upper and left minus right) at this point to facilitate artifact rejection.Ê You can also re-reference the data again after averaging to see how the waveforms look with different references.
-4. Epoch the continuous data to create single-trial EEG segments (e.g., from -200 to +800 ms).Ê In most systems, you will perform baseline correction at this stage (which is essential if you will be using an absolute voltage threshold in the next stage).
-5. Perform artifact rejection. Many systems require that you perform artifact after epoching, so I have put this step after epoching.Ê However, it works just as well to perform artifact rejection on the continuous EEG, prior to epoching, if your system allows it.
-6. Average the single-trial EEG epochs to create single-subject averaged ERP waveforms.Ê
-7. Plot the ERP waveforms to make sure that the artifact correction and rejection processes worked properly.Ê You may want to apply a low-pass filter (e.g., half amplitude cutoff = 30 Hz, slope = 12-24 dB/octave) before plotting so that you can see the data more clearly.Ê However, I would ordinarily recommend applying the subsequent steps to the unfiltered data. If necessary, average together different trial types if they werenÕt already combined during the initial averaging process (e.g., to collapse across factors used for counterbalancing).
-8. Make difference waves, if desired.Ê Note that averaging across trial types and making difference waves are linear operations, and mild low-pass filtering is either linear or nearly linear, so you can do these steps in any order.
+1. High-pass filter the data to remove slow drifts (e.g., half amplitude cutoff of 0.1 Hz, 12 dB/octave).Â  This should be done on long periods of continuous EEG to avoid edge artifacts, and any offset should be removed if a high-pass filter was not applied during data acquisition.Â  In rare cases, you may also want to apply a mild low-pass filter at this stage (e.g., half amplitude cutoff of 30 Hz, 12-24 dB/octave).
+2. Perform artifact correction, if desired. Â Periods of â€œcrazyâ€ data should be deleted prior to the artifact correction process if you use ICA (but donâ€™t delete ordinary artifacts, such as eyeblinks, prior to artifact correction).
+3. Re-reference the data, if desired.Â  For example, you may want to re-reference to the average of the mastoids at this point.Â  In addition, you will probably want to create bipolar EOG channels (e.g., lower minus upper and left minus right) at this point to facilitate artifact rejection.Â  You can also re-reference the data again after averaging to see how the waveforms look with different references.
+4. Epoch the continuous data to create single-trial EEG segments (e.g., from -200 to +800 ms).Â  In most systems, you will perform baseline correction at this stage (which is essential if you will be using an absolute voltage threshold in the next stage).
+5. Perform artifact rejection. Many systems require that you perform artifact after epoching, so I have put this step after epoching.Â  However, it works just as well to perform artifact rejection on the continuous EEG, prior to epoching, if your system allows it.
+6. Average the single-trial EEG epochs to create single-subject averaged ERP waveforms.Â 
+7. Plot the ERP waveforms to make sure that the artifact correction and rejection processes worked properly.Â  You may want to apply a low-pass filter (e.g., half amplitude cutoff = 30 Hz, slope = 12-24 dB/octave) before plotting so that you can see the data more clearly.Â  However, I would ordinarily recommend applying the subsequent steps to the unfiltered data. If necessary, average together different trial types if they werenâ€™t already combined during the initial averaging process (e.g., to collapse across factors used for counterbalancing).
+8. Make difference waves, if desired.Â  Note that averaging across trial types and making difference waves are linear operations, and mild low-pass filtering is either linear or nearly linear, so you can do these steps in any order.
 9. If you are averaging multiple waveforms together and/or making difference waves, you should plot the waveforms from each step so that you can verify that the averaging and differencing processes are working properly.
 10. Make grand averages across subjects (and possibly leave-one-out grand averages for jackknifing).
-11. Measure amplitudes and latencies (from the single-subject ERPs in most cases, but from the leave-one-out grand averages if you are using the jackknife approach). If you are measuring peak amplitude or peak latency, you should usually apply a mild low-pass filter first (e.g., half amplitude cutoff = 20-30 Hz, slope = 12-24 dB/octave).Ê If you are measuring onset or offset latency, you should usually apply a more severe filter first (e.g., half amplitude cutoff = 10-20 Hz, slope = 12-24 dB/octave).Ê If you are measuring mean amplitude, integral amplitude, or area amplitude, it is best to avoid low-pass filtering the data (except the antialiasing filter that was applied during the EEG recording).
+11. Measure amplitudes and latencies (from the single-subject ERPs in most cases, but from the leave-one-out grand averages if you are using the jackknife approach). If you are measuring peak amplitude or peak latency, you should usually apply a mild low-pass filter first (e.g., half amplitude cutoff = 20-30 Hz, slope = 12-24 dB/octave).Â  If you are measuring onset or offset latency, you should usually apply a more severe filter first (e.g., half amplitude cutoff = 10-20 Hz, slope = 12-24 dB/octave).Â  If you are measuring mean amplitude, integral amplitude, or area amplitude, it is best to avoid low-pass filtering the data (except the antialiasing filter that was applied during the EEG recording).
+
+
+~~~ Analysis taken from
+
+Auditory rhythms entrain visual processes in the human brain: evidence from evoked oscillations and event-related potentials.
+
+(Neuroimage)
+
+Preprocess
+The EEG data was preprocessed with EEGLAB (Delorme andMakeig, 2004). The recording was first down-sampled to 256 Hz, band-pass filtered between 0.015 and 30 Hz and re-referenced to a 64-channels average reference. During visual examination, epochs with drifts, movement or muscle artifacts were removed. The EEG was then subjected to an Independent Component Analysis algorithm to isolate and remove independent components associated with eye movement artifacts (Jung et al., 2000). The back-projected data was epoched time-locked to image onset or the equivalent timepoint for the no-image silent beat epochs. Epochs comprised a 350 ms pre-stimulus interval and an 800 ms post-stimulus interval. These intervals were selected to enable the analysis of both ERPs and evoked oscillations. For the ERP analysis only, epochs were baseline corrected using a 200ms pre-stimulus window. All epochs were then visually examined and discarded if residual artifacts were identified. After this procedure, an average 141 of trials per condition remained. Participants were excluded from analysis if more than 30% of the trials in any one condition had been rejected. As already mentioned under â€œParticipantsâ€, four individuals were excluded following this procedure.
+
+
+ERP
+Visual inspections of the ERPs revealed effects on a small component elicited at the time of stimulus onset and henceforth referred to as a stimulus onset potential (SOP). SOP-like potentials have been previously associated with effects in the alpha band (Barry et al., 2003, 2004). In addition to the SOP, we observed a modulation of the N1, an established index of attentional and discriminatory visual processes (Luck et al., 1990; Mangun and Hillyard, 1991; Vogel and Luck, 2000). We examined the SOP in a time window ranging fromâˆ’15 to 15ms around stimulus onset. Because SOP polarity differed between conditions, mean rather than peak voltages in the SOP time window were used for analysis. We analyzed the N1 in a time window ranging from 150 to 170ms following stimulus onset. Because the N1 had a negative polarity irrespective of condition, the analysis was performed on voltage minima. The same electrodes of interest were used to analyse both components. They covered posterior, occipito-temporal regions (O1, PO7 and P7 in the left hemisphere and O2, PO8 and P8 in the right hemisphere). Mean values derived from these electrodes entered ANOVAs with Rhythmic Expectations (in-synchrony, out-of-synchrony, silence) and Hemisphere (left, right) as repeated measures factors.
+
+
+
+Oscillations
+Oscillation analyses were performed using EEGLAB, the CircStat toolbox (Berens, 2009), and in-house developed Matlab functions (The Mathworks). They were done on the same set of electrodes as selected for the ERP analysis described above. The EEG data recorded at these electrodes was averaged and subjected to a complex Morlet wavelet transform, which allowed us to evaluate condition differences in phase before stimulus onset (Tallon-Baudry et al., 1997). We used a series of wavelets covering frequencies from 5 Hz to 30 Hz (c = 2â€“6, increasing linearly; Ïƒf = 1.7â€“5.0 Hz; Ïƒt =94â€“32 ms; wavelet window lengths decreased linearly from 400 at low frequencies to 200 ms at high frequencies). In classical wavelet analysis, data from both before and after each data point is used to estimate local wavelet parameters. These parameters are therefore estimated in an a causal manner, meaning that they are affected by signal changes that occur later in time (Zoefel and Heil, 2013). This is problematic when examining signal in the vicinity of a stimulus onset because the post-stimulus ERPs can bias pre-stimulus power and phase estimates, producing spurious relationships between pre-stimulus estimates and post- stimulus signal. To prevent this possibility we used a novel causal technique that eliminates the influence of post-stimulus signals on the estimation of pre-stimulus wavelet parameters (Lakatos et al., 2013). For every trial, the post-stimulus data that overlapped with the pre-stimulus wavelet time-window was replaced by a line interpolating the signal in this interval. Lakatos et al. (2013) have shown that this procedure returns unbiased wavelet parameter estimates.
+
+From the complex wavelet transforms, we computed the average power and the average phase over electrodes and over a âˆ’100 to 0 ms time window before image onset. This window was chosen to capture oscillatory effects occurring just prior to stimulus onset that could be linked to potential expectations for an upcoming visual stimulus. Power and phase values were averaged for four frequency bands. These bands comprised theta (5â€“7Hz),alpha (8â€“12 Hz), low beta (13â€“20 Hz) and high beta (21â€“30 Hz). High and low beta bands were immediately relevant for our predictions. Oscillations in the other bands were explored due to their potential interest for the oscillation literature (Gross et al., 2004; Mathewson et al., 2009; Rohenkohl and Nobre, 2011; Sauseng et al., 2007). For each of these frequency bands, we first determined whether
+phase alignment had occurred. To this end, we analyzed phase consistency for each condition and each frequency band using a Rayleigh test of uniformity (Fisher, 1993; Lakatos et al., 2008; Mardia and Jupp, 2000). This test allowed us to infer whether the phases in the prestimulus analysis window were uniformly distributed. In conditions and frequency bands showing a significant phase consistency, we further examined average phase using large sample, non-parametric two-sample tests (Fisher, 1993). Additionally, we explored oscillatory power using an ANOVA. The relationship between phase changes related to rhythmic expectations and subsequent ERPs was also investigated. To this end, the difference between in- and out-of-synchrony conditions in phase and in ERP amplitudes was computed and subjected to a linearâ€“circular correlation (Mardia and Jupp, 2000). As the phase analysis relied on multiple comparisons, we sought to reduce the chance of false positive results by controlling the False Discovery Rate (FDR; Benjamini and Hochberg, 1995; Gavrilov et al., 2009). Unless noted otherwise, the reported phase results passed the 5% FDR criterion. All statistical analyses were performed in R (R Core Team, 2013) using the circular package (Agostinelli and Lund, 2011). 
 
 
 ~~~ What I usually do
@@ -27,19 +49,19 @@ Import (or find) events and bins
 Unreference the non-head channels
 unref = EEG.data(40,:);
 
-% 40 % -- This should be GSR2 Ð- there was no GSR2 recorded, so it should be zero, but all the non-head channels get screwed up when you import with mastoid references, so this is supposed to fix them.
+% 40 % -- This should be GSR2 â€“- there was no GSR2 recorded, so it should be zero, but all the non-head channels get screwed up when you import with mastoid references, so this is supposed to fix them.
 
 unref = repmat(unref, [size(EEG.data, 1)-34,1]);
 EEG.data(35:end, :) = EEG.data(35:end, :) - unref;
 
 Exclude bad channels
        Possibly using pop_select(EEG, 'nochannel', [x])
-       Éor just by selecting the data without that channel.
+       â€¦or just by selecting the data without that channel.
 (not including channels with eye (or other) muscle artifacts that might come out in ICA)
 Change channel types to specify EEG, EMG, eyes, GSR, and SYNC in Edit > Channel Locations menu
 
 Filter EEG channels: EEG = pop_eegfiltnew(EEG, 'locutoff',0.1,'hicutoff',80,'chantype',{'EEG', 'EYE'});
-    % Maybe lower hi-cut for just ERPs Ð 40? 30?
+    % Maybe lower hi-cut for just ERPs â€“ 40? 30?
 	%filter eyes too!
 
 Epoch -1000:1000
@@ -52,10 +74,10 @@ Remove eyes (and widespread noise?)
 
 OPTIONAL:
 Get current-source-density (CSD) ERPlagb > Datatype transformations > Compute CSD from EEG
-(Save a version that doesnÕt have CSD)
+(Save a version that doesnâ€™t have CSD)
 
 
-Remove epochs that suck (llook at data, experiment with parameters, figure out what parameters remove data thatÕs obviously weird but not other stuff)
+Remove epochs that suck (llook at data, experiment with parameters, figure out what parameters remove data thatâ€™s obviously weird but not other stuff)
 
 
 

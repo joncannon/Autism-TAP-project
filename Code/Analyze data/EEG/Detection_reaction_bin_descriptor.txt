@@ -1,0 +1,71 @@
+bin 1
+All predictable silences
+.{9210;9310;1119410}
+
+bin 2
+All standard targets
+.{9120;9130;9140;9150;9160;9220;9230;9240;9250;9260;9320;9330;9340;9350;9360;1109420;1109430;1109440;1109450;1109460;1009420;1009430;1009440;1009450;1009460}
+
+bin 3
+All detected targets (unpredictable)
+.{9120;9130;9140;9150;9160}{t<10-900>19100}
+
+bin 4
+All detected targets (interval)
+.{9220;9230;9240;9250;9260}{t<10-900>19200}
+
+bin 5
+All detected targets (beat)
+.{9320;9330;9340;9350;9360}{t<10-900>19300}
+
+bin 6
+All detected targets (implicit, cued)
+.{1109420;1109430;1109440;1109450;1109260}{t<10-900>19400}
+
+bin 7
+All detected targets (implicit, uncued)
+.{1009420;1009430;1009440;1009450;1009260}{t<10-900>19400}
+
+bin 8
+All expected silences (interval)
+.{9210}
+
+bin 9
+All expected silences (beat)
+.{9310}
+
+bin 10
+All taps
+.{19100;19200;19300;1119400}
+
+bin 11
+All cues (unpredictable)
+.{9101}
+
+bin 12
+All cues (unpredictable, uninterrupted)
+.{9101}{t<1-600>~9120;9130;9140;9150;9160}
+
+bin 13
+All cues (interval)
+.{9201}
+
+bin 14
+All cues (beat)
+.{9301}
+
+bin 15
+All cues #3 (beat)
+.{9301}{t<10-1000>9320;9320;9330;9340;9350;9360}
+
+bin 16
+All cues (unpredictable, uninterrupted for 800ms)
+.{9101}{t<1-800>~9120;9130;9140;9150;9160}
+
+bin 17
+All cues followed by silence (interval)
+.{9201}{t<1-800>9210}
+
+bin 18
+All cues #3 followed by silence (beat)
+.{9301}{t<10-1000>9310}

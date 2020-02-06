@@ -1,11 +1,29 @@
 -------
 
+
+Recommended by EEG lab:
+1. High-pass filter the data to remove slow drifts (e.g., half amplitude cutoff of 0.1 Hz, 12 dB/octave).  This should be done on long periods of continuous EEG to avoid edge artifacts, and any offset should be removed if a high-pass filter was not applied during data acquisition.  In rare cases, you may also want to apply a mild low-pass filter at this stage (e.g., half amplitude cutoff of 30 Hz, 12-24 dB/octave).
+2. Perform artifact correction, if desired.  Periods of “crazy” data should be deleted prior to the artifact correction process if you use ICA (but don’t delete ordinary artifacts, such as eyeblinks, prior to artifact correction).
+3. Re-reference the data, if desired.  For example, you may want to re-reference to the average of the mastoids at this point.  In addition, you will probably want to create bipolar EOG channels (e.g., lower minus upper and left minus right) at this point to facilitate artifact rejection.  You can also re-reference the data again after averaging to see how the waveforms look with different references.
+4. Epoch the continuous data to create single-trial EEG segments (e.g., from -200 to +800 ms).  In most systems, you will perform baseline correction at this stage (which is essential if you will be using an absolute voltage threshold in the next stage).
+5. Perform artifact rejection. Many systems require that you perform artifact after epoching, so I have put this step after epoching.  However, it works just as well to perform artifact rejection on the continuous EEG, prior to epoching, if your system allows it.
+6. Average the single-trial EEG epochs to create single-subject averaged ERP waveforms. 
+7. Plot the ERP waveforms to make sure that the artifact correction and rejection processes worked properly.  You may want to apply a low-pass filter (e.g., half amplitude cutoff = 30 Hz, slope = 12-24 dB/octave) before plotting so that you can see the data more clearly.  However, I would ordinarily recommend applying the subsequent steps to the unfiltered data. If necessary, average together different trial types if they weren’t already combined during the initial averaging process (e.g., to collapse across factors used for counterbalancing).
+8. Make difference waves, if desired.  Note that averaging across trial types and making difference waves are linear operations, and mild low-pass filtering is either linear or nearly linear, so you can do these steps in any order.
+9. If you are averaging multiple waveforms together and/or making difference waves, you should plot the waveforms from each step so that you can verify that the averaging and differencing processes are working properly.
+10. Make grand averages across subjects (and possibly leave-one-out grand averages for jackknifing).
+11. Measure amplitudes and latencies (from the single-subject ERPs in most cases, but from the leave-one-out grand averages if you are using the jackknife approach). If you are measuring peak amplitude or peak latency, you should usually apply a mild low-pass filter first (e.g., half amplitude cutoff = 20-30 Hz, slope = 12-24 dB/octave).  If you are measuring onset or offset latency, you should usually apply a more severe filter first (e.g., half amplitude cutoff = 10-20 Hz, slope = 12-24 dB/octave).  If you are measuring mean amplitude, integral amplitude, or area amplitude, it is best to avoid low-pass filtering the data (except the antialiasing filter that was applied during the EEG recording).
+
+
+~~~ What I usually do
+
 Import with mastoid reference
 
 
 hi-pass EEG sync channel: 40Hz
 Import (or find) events and bins
 
+~ For undoing the automatic referencing that gets applied to the EMG, GSR, and SYNC data
 Unreference the non-head channels
 unref = EEG.data(40,:);
 
@@ -41,17 +59,5 @@ Remove epochs that suck (llook at data, experiment with parameters, figure out w
 
 
 
-Recommended by EEG lab:
-1. High-pass filter the data to remove slow drifts (e.g., half amplitude cutoff of 0.1 Hz, 12 dB/octave).  This should be done on long periods of continuous EEG to avoid edge artifacts, and any offset should be removed if a high-pass filter was not applied during data acquisition.  In rare cases, you may also want to apply a mild low-pass filter at this stage (e.g., half amplitude cutoff of 30 Hz, 12-24 dB/octave).
-2. Perform artifact correction, if desired.  Periods of “crazy” data should be deleted prior to the artifact correction process if you use ICA (but don’t delete ordinary artifacts, such as eyeblinks, prior to artifact correction).
-3. Re-reference the data, if desired.  For example, you may want to re-reference to the average of the mastoids at this point.  In addition, you will probably want to create bipolar EOG channels (e.g., lower minus upper and left minus right) at this point to facilitate artifact rejection.  You can also re-reference the data again after averaging to see how the waveforms look with different references.
-4. Epoch the continuous data to create single-trial EEG segments (e.g., from -200 to +800 ms).  In most systems, you will perform baseline correction at this stage (which is essential if you will be using an absolute voltage threshold in the next stage).
-5. Perform artifact rejection. Many systems require that you perform artifact after epoching, so I have put this step after epoching.  However, it works just as well to perform artifact rejection on the continuous EEG, prior to epoching, if your system allows it.
-6. Average the single-trial EEG epochs to create single-subject averaged ERP waveforms. 
-7. Plot the ERP waveforms to make sure that the artifact correction and rejection processes worked properly.  You may want to apply a low-pass filter (e.g., half amplitude cutoff = 30 Hz, slope = 12-24 dB/octave) before plotting so that you can see the data more clearly.  However, I would ordinarily recommend applying the subsequent steps to the unfiltered data. If necessary, average together different trial types if they weren’t already combined during the initial averaging process (e.g., to collapse across factors used for counterbalancing).
-8. Make difference waves, if desired.  Note that averaging across trial types and making difference waves are linear operations, and mild low-pass filtering is either linear or nearly linear, so you can do these steps in any order.
-9. If you are averaging multiple waveforms together and/or making difference waves, you should plot the waveforms from each step so that you can verify that the averaging and differencing processes are working properly.
-10. Make grand averages across subjects (and possibly leave-one-out grand averages for jackknifing).
-11. Measure amplitudes and latencies (from the single-subject ERPs in most cases, but from the leave-one-out grand averages if you are using the jackknife approach). If you are measuring peak amplitude or peak latency, you should usually apply a mild low-pass filter first (e.g., half amplitude cutoff = 20-30 Hz, slope = 12-24 dB/octave).  If you are measuring onset or offset latency, you should usually apply a more severe filter first (e.g., half amplitude cutoff = 10-20 Hz, slope = 12-24 dB/octave).  If you are measuring mean amplitude, integral amplitude, or area amplitude, it is best to avoid low-pass filtering the data (except the antialiasing filter that was applied during the EEG recording).
 
 

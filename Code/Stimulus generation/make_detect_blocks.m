@@ -93,26 +93,57 @@ contingency_detect_instruction(:,2) = 0;
 all_blocks= {};
 n_trials = 25;
 
-trial_tag = i+10*params.listen_standard_tag;
-block = stim_maker_standard(strcat(filepath, 'listen_metronome_', timestamp), all_periods(i), 25+floor(rand()*5), false, trial_tag, params);
+trial_tag = 10*params.listen_standard_tag;
+filename = strcat(filepath, 'listen_metronome_', timestamp)
+block = stim_maker_standard(filename, mean_delay, 120, false, trial_tag, params);
+block.filename=filename;
 block.instruction_type = 'listen';
 block.instructions = [];%rxn_inst;
-listening_blocks{end+1} = block;
+all_blocks{end+1} = block;
+
+trial_tag = 1+10*params.listen_standard_tag;
+filename = strcat(filepath, 'listen_random_', timestamp)
+block = stim_maker_standard(filename, rand_delay_gen, 120, false, trial_tag, params);
+block.filename=filename;
+block.instruction_type = 'listen';
+block.instructions = [];%rxn_inst;
+all_blocks{end+1} = block;
+
+trial_tag = 2+10*params.listen_standard_tag;
+filename=strcat(filepath, 'fade_in_', timestamp);
+block = stim_maker_SSAEP(filename, mean_delay, 120, .075, -1, .01, trial_tag, params);
+block.filename=filename;
+block.instruction_type = 'report';
+block.instructions = [];%rxn_inst;
+all_blocks{end+1} = block;
+
+trial_tag = 3+10*params.listen_standard_tag;
+filename = strcat(filepath, 'fade_out_', timestamp);
+block = stim_maker_SSAEP(filename, mean_delay, 120, .075, 1, .01, trial_tag, params);
+block.filename=filename;
+block.instruction_type = 'report';
+block.instructions = [];%rxn_inst;
+all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 1;
-block = stim_maker_detect(strcat(filepath, 'rand_detect_', timestamp), n_trials, 1, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
+filename = strcat(filepath, 'rand_detect_', timestamp);
+block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
+block.filename=filename;
 block.instructions = random_detect_instruction;
 all_blocks{end+1} = block;
 
-
 trial_tag = 10*params.detect_tag + 2;
-block = stim_maker_detect(strcat(filepath, 'int_detect_', timestamp), n_trials, 1, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+filename = strcat(filepath, 'int_detect_', timestamp);
+block = stim_maker_detect(filename, n_trials, 1, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+block.filename=filename;
 block.instructions = interval_cued_detect_instruction;
 all_blocks{end+1} = block;
 
 
 trial_tag = 10*params.detect_tag + 3;
-block = stim_maker_detect(strcat(filepath, 'beat_detect_', timestamp), n_trials, 3, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+filename=strcat(filepath, 'beat_detect_', timestamp);
+block = stim_maker_detect(filename, n_trials, 3, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+block.filename=filename;
 block.instructions = beat_cued_detect_instruction;
 all_blocks{end+1} = block;
 
@@ -133,7 +164,9 @@ phase_types{1}.phase_code = 1;
 phases = {phase_types{1}};
 
 trial_tag = 10*params.detect_tag + 4;
-contingency_block = stim_maker_detect_contingency(strcat(filepath, 'contingency_detect_', timestamp), phases, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
+filename=strcat(filepath, 'contingency_detect_', timestamp);
+contingency_block = stim_maker_detect_contingency(filename, phases, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
+contingency_block.filename=filename;
 contingency_block.instructions = contingency_detect_instruction;
 all_blocks{end+1} = contingency_block;
 

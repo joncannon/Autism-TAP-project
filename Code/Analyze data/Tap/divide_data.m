@@ -13,6 +13,7 @@ for i = 1:length(block_struct)
     event_index = event_index + num_events + 2;
 end
 
+% Fatima changed this
 
 for i = 1:length(block_struct)
     first_event = updated_struct{i}.wav_event_times(1);

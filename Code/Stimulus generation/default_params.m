@@ -11,7 +11,7 @@ function params = default_params()
 
 %    params.beep_shift = floor(.1*params.Fs);
 
-    tick = audioread('../../stimulus_components/wood_tick.wav');
+    tick = audioread('stimulus_components/wood_tick.wav');
     params.sound_list{1} = 0.2*tick(:,1);
     params.standard_index = 1;
 

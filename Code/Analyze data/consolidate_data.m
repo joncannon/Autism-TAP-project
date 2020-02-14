@@ -97,7 +97,10 @@ while i < size(EEG.data, 2)-2*pulse_spacing
             if collecting & length(block_struct_w_eeg{n_block}.eeg_event_latencies)==length(block_struct_w_eeg{n_block}.code)
                 block_struct_w_eeg{n_block}.complete = true;
             end
-
+            
+         
+            block_struct_w_eeg{n_block}.block_latency_range(end+1) = i;
+            block_struct_w_eeg{n_block}.block_time_range(end+1) = i/512;
 
             block_struct_w_eeg{n_block}.eeg_tap_times = block_struct_w_eeg{n_block}.wav_tap_times + block_struct_w_eeg{n_block}.eeg_event_times(1) - block_struct_w_eeg{n_block}.wav_event_times(1);    
             block_struct_w_eeg{n_block}.eeg_tap_latencies = floor(block_struct_w_eeg{n_block}.eeg_tap_times*512);
@@ -122,11 +125,14 @@ while i < size(EEG.data, 2)-2*pulse_spacing
                 end
             end
         elseif n_pulses=2 % beginning-of-block signal
-
+            
             n_block = n_block + 1;
             collecting = true;
             block_struct_w_eeg{n_block}.eeg_event_times = [];
             block_struct_w_eeg{n_block}.eeg_event_latencies = [];
+            block_struct_w_eeg{n_block}.block_latency_range = [i];
+            block_struct_w_eeg{n_block}.block_time_range = [i/512];
+                
 
         else % regular event
             

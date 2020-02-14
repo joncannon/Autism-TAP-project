@@ -9,22 +9,22 @@ params = default_params();
 separation_space = zeros(44100*params.intertrial_time, 2);
 
 
-distract_inst = audioread('../../stimulus_components/Safari_time.wav');
+distract_inst = audioread('stimulus_components/Safari_time.wav');
 distract_inst(:,2) = 0;
 distract_inst = vertcat(distract_inst, zeros(44100*5, 2));
 
-detect_instruction = audioread('../../stimulus_components/Detect/Detect.wav');
+detect_instruction = audioread('stimulus_components/Detect/Detect.wav');
 
-start_w_click_instruction = audioread('../../stimulus_components/Detect/Begin_with_a_woodblock.wav');
-start_w_three_clicks_instruction = audioread('../../stimulus_components/Detect/Three_clicks.wav');
+start_w_click_instruction = audioread('stimulus_components/Detect/Begin_with_a_woodblock.wav');
+start_w_three_clicks_instruction = audioread('stimulus_components/Detect/Three_clicks.wav');
 
-after_rand_instruction = audioread('../../stimulus_components/Detect/Random_detect.wav');
-after_fixed_instruction = audioread('../../stimulus_components/Detect/Interval_detect.wav');
-after_beats_instruction = audioread('../../stimulus_components/Detect/Beat_detect.wav');
+after_rand_instruction = audioread('stimulus_components/Detect/Random_detect.wav');
+after_fixed_instruction = audioread('stimulus_components/Detect/Interval_detect.wav');
+after_beats_instruction = audioread('stimulus_components/Detect/Beat_detect.wav');
 
-some_examples_instruction = audioread('../../stimulus_components/detect/Some_examples.wav');
-will_last_instruction = audioread('../../stimulus_components/detect/Will_last.wav');
-lets_start_instruction = audioread('../../stimulus_components/detect/Lets_get_started.wav');
+some_examples_instruction = audioread('stimulus_components/detect/Some_examples.wav');
+will_last_instruction = audioread('stimulus_components/detect/Will_last.wav');
+lets_start_instruction = audioread('stimulus_components/detect/Lets_get_started.wav');
 
 mean_delay = .7;
 fixed_delay_gen = @(i) mean_delay;

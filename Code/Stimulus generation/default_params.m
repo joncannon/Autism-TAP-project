@@ -34,6 +34,7 @@ function params = default_params()
 
     params.sound_list{4} = 0;
     params.omission_index = 4;
+    
 
     lowfreq = 330;
     hifreq = 880;
@@ -86,6 +87,12 @@ function params = default_params()
             params.sound_list{id} = beepdown';
         end
     end
+    
+    
+    risingfreq = exp(log(880) + 2*.1*(x_beep/(n_samples)-.5));
+    beepup = .02*sin(x_beep * 2*pi .* risingfreq / 44100).* envlp;
+    params.sound_list{5} = beepup';
+    params.query_index = 5;
     
     params.n_vdiscrim_difficulties = length(logvolspreads);
     params.n_vdiscrim_pitches = length(logmeanfreqs);

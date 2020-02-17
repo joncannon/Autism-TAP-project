@@ -1,6 +1,6 @@
 timestamp = datestr(clock, 'dd-mmm-yyyy_HH+MM+SS');
 
-filepath = strcat('../stimulus_sequences/', 'detect_', timestamp);
+filepath = strcat('../../stimulus_sequences/', 'detect_', timestamp);
 mkdir(filepath);
 filepath = strcat(filepath, '/');
 
@@ -8,6 +8,14 @@ params = default_params();
 
 separation_space = zeros(44100*params.intertrial_time, 2);
 
+
+calibration_inst = audioread('stimulus_components/Calibrate.wav');
+calibration_inst = vertcat(calibration_inst, params.calibration_sound);
+calibration_inst(:,2) = 0;
+
+hearingtest_inst = audioread('stimulus_components/Raise_hand.wav');
+hearingtest_inst(:,2) = 0;
+hearingtest_inst = vertcat(hearingtest_inst, zeros(44100*3, 2));
 
 distract_inst = audioread('stimulus_components/Safari_time.wav');
 distract_inst(:,2) = 0;
@@ -45,7 +53,7 @@ rand_example_3 =zeros((1.5+3)*44100, 1);
 rand_example_3(1:length(params.sound_list{params.standard_index})) = params.sound_list{params.standard_index};
 rand_example_3(1.5*44100+1:1.5*44100+length(params.sound_list{params.get_detect_id(3,params.n_detect_difficulties-1)})) = params.sound_list{params.get_detect_id(3,params.n_detect_difficulties-1)};
 
-some_rand_examples = vertcat(interval_example_1, interval_example_2, interval_example_3);
+some_rand_examples = vertcat(rand_example_1, rand_example_2, rand_example_3);
 
 random_detect_instruction = vertcat(detect_instruction, start_w_click_instruction, params.sound_list{params.standard_index}, after_rand_instruction, some_examples_instruction, some_rand_examples, will_last_instruction, lets_start_instruction);
 random_detect_instruction(:,2) = 0;
@@ -93,43 +101,18 @@ contingency_detect_instruction(:,2) = 0;
 all_blocks= {};
 n_trials = 25;
 
-trial_tag = 10*params.listen_standard_tag;
-filename = strcat(filepath, 'listen_metronome_', timestamp)
-block = stim_maker_standard(filename, mean_delay, 120, false, trial_tag, params);
-block.filename=filename;
-block.instruction_type = 'listen';
-block.instructions = [];%rxn_inst;
-all_blocks{end+1} = block;
 
-trial_tag = 1+10*params.listen_standard_tag;
-filename = strcat(filepath, 'listen_random_', timestamp)
-block = stim_maker_standard(filename, rand_delay_gen, 120, false, trial_tag, params);
+filename = strcat(filepath, 'hearing_', timestamp);
+block = stim_maker_hearingtest(filename, params);
 block.filename=filename;
-block.instruction_type = 'listen';
-block.instructions = [];%rxn_inst;
-all_blocks{end+1} = block;
-
-trial_tag = 2+10*params.listen_standard_tag;
-filename=strcat(filepath, 'fade_in_', timestamp);
-block = stim_maker_SSAEP(filename, mean_delay, 120, .075, -1, .01, trial_tag, params);
-block.filename=filename;
-block.instruction_type = 'report';
-block.instructions = [];%rxn_inst;
-all_blocks{end+1} = block;
-
-trial_tag = 3+10*params.listen_standard_tag;
-filename = strcat(filepath, 'fade_out_', timestamp);
-block = stim_maker_SSAEP(filename, mean_delay, 120, .075, 1, .01, trial_tag, params);
-block.filename=filename;
-block.instruction_type = 'report';
-block.instructions = [];%rxn_inst;
+block.instructions = vertcat(calibration_inst, hearingtest_inst);
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 1;
 filename = strcat(filepath, 'rand_detect_', timestamp);
 block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
 block.filename=filename;
-block.instructions = random_detect_instruction;
+block.instructions = vertcat(calibration_inst, random_detect_instruction);
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 2;
@@ -171,6 +154,7 @@ contingency_block.instructions = contingency_detect_instruction;
 all_blocks{end+1} = contingency_block;
 
 fullsound = [];
+
 for i = 1:length(all_blocks)
     fullsound = vertcat(fullsound,all_blocks{i}.instructions, all_blocks{i}.sound);   
     fullsound = vertcat(fullsound,separation_space);

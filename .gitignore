@@ -1,0 +1,7 @@
+*.DS_Store
+Data*
+stimulus_sequences*
+*.mp4
+*.m4a
+examples*
+*Story_*

@@ -26,8 +26,7 @@ SSAEP_inst = vertcat(SSAEP_inst, zeros(44100*5, 2));
 
 mean_delay = .8;
 fixed_delay_gen = @(i) mean_delay;
-rand_delay_gen = @(i) exprnd(mean_delay) + sync_time*6;
-uniform_delay_gen = @(i) (rand()*.6 -.3) + mean_delay;
+rand_delay_gen = @(i) max(exprnd(mean_delay), sync_time*6);
 
 rand_long_delay_gen = @(i) exprnd(3);
 fixed_interval_gen = @(i) 3;
@@ -63,7 +62,7 @@ all_blocks{end+1} = block;
 
 trial_tag = 2+10*params.listen_standard_tag;
 filename = strcat(filepath, 'listen_random_', timestamp);
-block = stim_maker_standard(filename, uniform_delay_gen, 120, false, trial_tag, params);
+block = stim_maker_standard(filename, rand_delay_gen, 120, false, trial_tag, params);
 block.filename=filename;
 block.instruction_type = 'listen';
 block.instructions = [];%rxn_inst;
@@ -78,15 +77,15 @@ block.instruction_type = 'listen';
 block.instructions = [];%%%
 all_blocks{end+1} = block;
 
-trial_tag = 4+10*params.listen_omission_tag;
-filename = strcat(filepath, 'omission_', timestamp);
-block = stim_maker_omission(filename, mean_delay, 240, .15, false, trial_tag, params);
+trial_tag = 3+10*params.listen_omission_tag;
+filename = strcat(filepath, 'o_', timestamp);
+block = stim_maker_deviant(filename, mean_delay, 240, .15, false, trial_tag, params);
 block.filename=filename;
 block.instruction_type = 'listen';
 block.instructions = [];%%%
 all_blocks{end+1} = block;
 
-trial_tag = 5+10*params.listen_standard_tag;
+trial_tag = 4+10*params.listen_standard_tag;
 filename = strcat(filepath, 'SSAEP_', timestamp);
 block = stim_maker_SSAEP(filename, mean_delay, 240, .075, 0, .01, trial_tag, params);
 block.filename=filename;

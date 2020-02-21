@@ -46,7 +46,7 @@ function params = default_params()
     params.anchor_decibel = 50;
     params.anchor_amplitude = .1;
     
-    anchor_duration = 10;
+    anchor_duration = 30;
     params.calibration_sound = params.anchor_amplitude*sin((1:(anchor_duration * 44100)) * 2*pi * 440 / 44100)';
     % set to 50 decibels
     

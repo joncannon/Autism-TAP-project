@@ -2,8 +2,6 @@ function snd_total=master_stim_maker(filename, intervals, identities, params)
 
 % interval = vector
 
-intervals
-
 snd_total=zeros(floor((sum(intervals)+2+2)*44100), 2);
 
 Fs = params.Fs;

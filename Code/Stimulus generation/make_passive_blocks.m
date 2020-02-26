@@ -38,20 +38,28 @@ all_blocks= {};
 
 trial_tag = 0;
 filename = strcat(filepath, 'storytime_1_', timestamp);
-block = stim_maker_storytime(filename, 'stimulus_components/Language/Story_audio1n.wav', part1_onsets, trial_tag, params);
+block = stim_maker_storytime(filename, 'stimulus_components/Language/Story_audio1n.wav', part1_onsets, false, trial_tag, params);
 block.filename=filename;
 block.instruction_type = 'story';
 block.instructions = story_inst;%%%
 all_blocks{end+1} = block;
+
 
 trial_tag = 0;
-filename = strcat(filepath, 'storytime_2_', timestamp);
-block = stim_maker_storytime(filename, 'stimulus_components/Language/Story_audio2n.wav', part2_onsets, 0, params);
+filename = strcat(filepath, 'storytime_replay_', timestamp);
+block = stim_maker_storytime(filename, 'stimulus_components/Language/Story_audio1n.wav', part1_onsets, true, trial_tag, params);
 block.filename=filename;
 block.instruction_type = 'story';
-block.instructions = story_inst;%%%
+block.instructions = [];%%%%%%% REPEATING STORY
 all_blocks{end+1} = block;
-
+% 
+% trial_tag = 0;
+% filename = strcat(filepath, 'storytime_2_', timestamp);
+% block = stim_maker_storytime(filename, 'stimulus_components/Language/Story_audio2n.wav', part2_onsets, 0, params);
+% block.filename=filename;
+% block.instruction_type = 'story';
+% block.instructions = story_inst;%%%
+% all_blocks{end+1} = block;
 
 trial_tag = 1+10*params.listen_standard_tag;
 filename = strcat(filepath, 'listen_metronome_', timestamp);
@@ -93,6 +101,9 @@ block.filename=filename;
 block.instruction_type = 'SSAEP';
 block.instructions = SSAEP_inst;%%%
 all_blocks{end+1} = block;
+
+%Add delayed detection blocks
+
 
 fullsound = [];
 

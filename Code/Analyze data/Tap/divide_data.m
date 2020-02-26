@@ -7,11 +7,10 @@ updated_struct = block_struct;
 event_index = 2;
 for i = 1:length(block_struct)
     num_events = length(updated_struct{i}.code);
+    keyboard
     updated_struct{i}.wav_event_times = event_times(event_index:event_index + num_events-1); %skips first and last
     event_index = event_index + num_events + 2;
 end
-
-% Fatima changed this
 
 for i = 1:length(block_struct)
     first_event = updated_struct{i}.wav_event_times(1);

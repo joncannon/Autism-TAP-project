@@ -1,6 +1,7 @@
-function block=stim_maker_storytime(filename, story_filename, onset_times, trial_tag, params)
+function block=stim_maker_storytime(filename, story_filename, onset_times, just_the_end, trial_tag, params)
 
 Fs = 44100;
+
 story_snd = audioread(story_filename);
 story_snd(:,2) = 0;
 
@@ -9,6 +10,11 @@ sync_samples = floor(params.sync_eeg_samples*Fs/512);
 for i = 1:length(onset_times)
     onset_sample = floor(onset_times(i)*Fs)+1;
     story_snd(onset_sample+1:onset_sample+sync_samples, 2)=params.sync_amplitude;
+end
+
+
+if just_the_end
+    story_snd = story_snd(end- (30*44100) : end, :);
 end
 
 

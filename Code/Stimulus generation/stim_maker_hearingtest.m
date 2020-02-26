@@ -23,10 +23,23 @@ for i = 1:length(test_amplitudes)
     snd_total = vertcat(snd_total, zeros(4*44100, 1));
 end
     
+
+snd_total(:,2)=0;
+
+start_snd = zeros(floor(Fs),2);
+start_snd(1:sync_samples, 2)=params.sync_amplitude;
+start_snd(sync_samples*2+1:sync_samples*3, 2)=params.sync_amplitude;
+
+
+end_snd = zeros(floor(Fs),2);
+end_snd(1:sync_samples, 2)=params.sync_amplitude;
+end_snd(sync_samples*2+1:sync_samples*3, 2)=params.sync_amplitude;
+end_snd(sync_samples*4+1:sync_samples*5, 2)=params.sync_amplitude;
+
 block = struct();
 
-block.sound=snd_total;
-block.sound(:,2)=0;
+block.sound=vertcat(start_snd, snd_total, end_snd);
+
 block.params = params;
 
 block.code = []

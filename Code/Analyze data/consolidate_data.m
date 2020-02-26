@@ -8,37 +8,49 @@
 
 %%
 
-with_eeg = true;
+basic_filter = false;
+heavy_filter = false;
 
-basic_filter = true;
-heavy_filter = false:
-
-answer = quastdlg('Do you have a file with tap audio?')
-if streq(answer, 'no')
-    with_tap = false;
+waitfor(msgbox('Please select the file with stimulus blocks'))
+[stimfile, stimpath] = uigetfile;
+load(fullfile(stimpath,stimfile), 'all_blocks_shuffled', 'all_blocks', 'params')
+if exist('all_blocks_shuffled','var')
+    block_struct = all_blocks_shuffled;
 else
-    tapfile = uigetfile;
-    answer = quastdlg('Please select the file with rerecord audio')
-    rrfile = uigetfile;
+    block_struct = all_blocks;
+end
+
+answer = questdlg('Do you have a file with tap audio?')
+if streq(answer, 'No')
+    with_tap = false;
+elseif streq(answer, 'Cancel')
+    return
+else
+    [tapfile, tappath] = uigetfile('*.wav');
+    waitfor(msgbox('Please select the file with rerecord audio'))
+    [rrfile, rrpath] = uigetfile('*.wav');
     with_tap=true;
 end
 
-answer = quastdlg('Do you have EEG data? (If so, make sure it is loaded in EEGlab before running this script.)')
-if streq(answer, 'yes')
+answer = questdlg('Do you have EEG data? (If so, make sure it is loaded in EEGlab and sync channel is hi-pass filtered to .5hz before running this script.)')
+if streq(answer, 'Yes')
     with_eeg = true;
+elseif streq(answer, 'Cancel')
+    return
 else
     with_eeg=false;
 end
 
 event_audio_threshold = .75;
 event_eeg_threshold = 1400;
-tap_threshold = .06;
+tap_threshold = .005; %.06
+event_threshold = .4;
 sync_channel = 41;
 %%
 
 if with_tap
-    tap_audio = audioread(tapfile);
-    event_audio = audioread(rrfile);
+    tap_audio = audioread(fullfile(tappath,tapfile));
+    event_audio = audioread(fullfile(rrpath, rrfile));
 
     if basic_filter
 
@@ -85,8 +97,8 @@ if with_tap
 
     % Extract tap times and assign them to the corresponding blocks.
 
-    wav_event_times = get_times(event_audio, event_threshold)
-    wav_tap_times = get_times(tap_audio_filt, tap_threshold)
+    wav_event_times = get_times(event_audio, event_threshold, 400)
+    wav_tap_times = get_times(tap_audio_filt, tap_threshold, 6000)
 
     block_struct = divide_data(wav_event_times, wav_tap_times, all_blocks)
 
@@ -96,7 +108,6 @@ end
 if with_eeg
     n_block = 0;
     block_struct_w_eeg = block_struct;
-    EE
     i = 2;
     counter = 1;
     pulse_spacing = 2*params.sync_eeg_samples;
@@ -107,9 +118,8 @@ if with_eeg
     while i < size(EEG.data, 2)-2*pulse_spacing
 
         if EEG.data(sync_channel, i)>event_eeg_threshold
-            n_pulses = 1 + (EEG.data(sync_channel, i+1+pulse_spacing)>event_eeg_threshold) + (EEG.data(sync_channel, i+1+2*pulse_spacing)>event_eeg_threshold);
+            n_pulses = 1 + (EEG.data(sync_channel, i+pulse_spacing)>event_eeg_threshold) + (EEG.data(sync_channel, i+2*pulse_spacing)>event_eeg_threshold);
             if n_pulses == 3 % end-of-block signal
-
                 if collecting & length(block_struct_w_eeg{n_block}.eeg_event_latencies)==length(block_struct_w_eeg{n_block}.code)
                     block_struct_w_eeg{n_block}.complete = true;
                 end
@@ -141,8 +151,8 @@ if with_eeg
     %                 end
                 end
             elseif n_pulses==2 % beginning-of-block signal
-
                 n_block = n_block + 1;
+                block_struct_w_eeg{n_block}.complete = false;
                 collecting = true;
                 block_struct_w_eeg{n_block}.eeg_event_times = [];
                 block_struct_w_eeg{n_block}.eeg_event_latencies = [];

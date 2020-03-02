@@ -1,4 +1,4 @@
-function block=stim_maker_detect(filename, n_trials, n_cues, cue_delay_generator, intertrial_interval_generator, trial_tag, params)
+function block=stim_maker_detect(filename, n_trials, n_cues, cue_delay_generator, intertrial_interval_generator, bell, trial_tag, params)
 
 identities = [];
 intervals = [];
@@ -14,7 +14,14 @@ for i = 1:n_trials
     id = params.get_detect_id(pitch, difficulty)
     
     identities(end+1) = id;
+    
     intervals(end+1) = intertrial_interval_generator(i);
+    
+    if bell
+        identities(end+1) = params.bell_index;
+        intervals(end+1) = 4;
+    end
+
 end
 
 block = struct();

@@ -5,6 +5,7 @@ mkdir(filepath);
 filepath = strcat(filepath, '/');
 
 params = default_params();
+size(params.sound_list{6})
 
 separation_space = zeros(44100*params.intertrial_time, 2);
 
@@ -37,9 +38,9 @@ lets_start_instruction = audioread('stimulus_components/detect/Lets_get_started.
 mean_delay = .7;
 fixed_delay_gen = @(i) mean_delay;
 fixed_delay_gen = @(i) mean_delay;
-rand_delay_gen = @(i) min(exprnd(mean_delay), ;
+rand_delay_gen = @(i) exprnd(mean_delay) + .1;
 
-rand_long_delay_gen = @(i) exprnd(3);
+rand_long_delay_gen = @(i) exprnd(3)+.1;
 fixed_interval_gen = @(i) 3;
 variable_interval_gen = @(i) 2+2*rand();
 
@@ -108,14 +109,6 @@ n_trials = 80;
 %Actual experiment code starts here
 
 
-
-
-filename = strcat(filepath, 'hearing_', timestamp);
-block = stim_maker_hearingtest(filename, params);
-block.filename=filename;
-block.instructions = vertcat(calibration_inst, hearingtest_inst);
-all_blocks{end+1} = block;
-
 phase_types = {};
 phase_types{1} = struct();
 phase_types{1}.n_cued_targets = 40;
@@ -140,23 +133,23 @@ all_blocks{end+1} = contingency_block;
 
 trial_tag = 10*params.detect_tag + 2;
 filename = strcat(filepath, 'int_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 1, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 1, fixed_delay_gen, fixed_interval_gen, false, trial_tag, params);
 block.filename=filename;
 block.instructions = interval_cued_detect_instruction;
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 3;
 filename=strcat(filepath, 'beat_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 3, fixed_delay_gen, fixed_interval_gen, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 3, fixed_delay_gen, fixed_interval_gen, false, trial_tag, params);
 block.filename=filename;
 block.instructions = beat_cued_detect_instruction;
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 4;
 filename = strcat(filepath, 'rand_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, fixed_interval_gen, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, fixed_interval_gen, false, trial_tag, params);
 block.filename=filename;
-block.instructions = vertcat(calibration_inst, random_detect_instruction);
+block.instructions = random_detect_instruction;
 all_blocks{end+1} = block;
 
 
@@ -172,4 +165,4 @@ end
 
 audiowrite(strcat(filepath, 'all_detect_', timestamp, '.wav'), fullsound, 44100);
 
-save(strcat(filepath, 'all_detect.mat_', timestamp, '.mat'), 'fullsound', 'all_blocks', 'params');
+save(strcat(filepath, 'all_detect.mat_', timestamp, '.mat'), 'fullsound', 'all_blocks');

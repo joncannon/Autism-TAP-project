@@ -17,7 +17,12 @@ function params = default_params()
 
     params.sound_list{2} = .2*resample(tick(:,1), 5,4);
     params.deviant_index = 2;
-
+    
+    bell = audioread('stimulus_components/Bell.wav');
+    params.sound_list{6} = 0.2*bell(:,1);
+    size(params.sound_list{6})
+    params.bell_index = 6;
+    
     x_beep = 1:(.2 * 44100);
     n_samples = length(x_beep);
     
@@ -34,6 +39,8 @@ function params = default_params()
 
     params.sound_list{4} = 0;
     params.omission_index = 4;
+    
+    
     
 
     lowfreq = 330;
@@ -132,3 +139,5 @@ function params = default_params()
     params.sync_amplitude = 0.02;
     params.sync_eeg_samples = 3;
     params.intertrial_time = 5;
+    
+    

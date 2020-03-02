@@ -97,9 +97,9 @@ if with_tap
 
     % Extract tap times and assign them to the corresponding blocks.
 
-    wav_event_times = get_times(event_audio, event_threshold, 400)
+    wav_event_times = get_times(event_audio, event_threshold, 300)
     wav_tap_times = get_times(tap_audio_filt, tap_threshold, 6000)
-
+keyboard
     block_struct = divide_data(wav_event_times, wav_tap_times, all_blocks)
 
 end
@@ -118,7 +118,9 @@ if with_eeg
     while i < size(EEG.data, 2)-2*pulse_spacing
 
         if EEG.data(sync_channel, i)>event_eeg_threshold
-            n_pulses = 1 + (EEG.data(sync_channel, i+pulse_spacing)>event_eeg_threshold) + (EEG.data(sync_channel, i+2*pulse_spacing)>event_eeg_threshold);
+            n_pulses = 1 ...
+                + (EEG.data(sync_channel, i+pulse_spacing)>event_eeg_threshold | EEG.data(sync_channel, 1+i+pulse_spacing)>event_eeg_threshold)...
+                + (EEG.data(sync_channel, i+2*pulse_spacing)>event_eeg_threshold | EEG.data(sync_channel, 1+i+2*pulse_spacing)>event_eeg_threshold);
             if n_pulses == 3 % end-of-block signal
                 if collecting & length(block_struct_w_eeg{n_block}.eeg_event_latencies)==length(block_struct_w_eeg{n_block}.code)
                     block_struct_w_eeg{n_block}.complete = true;
@@ -133,6 +135,7 @@ if with_eeg
                 collecting = false;
 
                 if block_struct_w_eeg{n_block}.complete
+                    
                     for n = 1:length(block_struct_w_eeg{n_block}.code)
                         events_w_taps(end+1).latency = block_struct_w_eeg{n_block}.eeg_event_latencies(n);
                         events_w_taps(end).duration = 0;
@@ -159,7 +162,9 @@ if with_eeg
                 block_struct_w_eeg{n_block}.block_latency_range = [i];
                 block_struct_w_eeg{n_block}.block_time_range = [i/512];
 
-
+                block_struct_w_eeg{n_block} = rmfield(block_struct_w_eeg{n_block},'sound');
+                block_struct_w_eeg{n_block} = rmfield(block_struct_w_eeg{n_block},'instructions');
+                block_struct_w_eeg{n_block} = rmfield(block_struct_w_eeg{n_block},'params');
             else % regular event
 
                 if collecting

@@ -27,9 +27,9 @@ detect_instruction = audioread('stimulus_components/Detect/Detect.wav');
 start_w_click_instruction = audioread('stimulus_components/Detect/Begin_with_a_woodblock.wav');
 start_w_three_clicks_instruction = audioread('stimulus_components/Detect/Three_clicks.wav');
 
-after_rand_instruction = audioread('stimulus_components/Detect/Random_detect.wav');
-after_fixed_instruction = audioread('stimulus_components/Detect/Interval_detect.wav');
-after_beats_instruction = audioread('stimulus_components/Detect/Beat_detect.wav');
+after_rand_instruction = audioread('stimulus_components/Detect/Random_detect_2.wav');
+after_fixed_instruction = audioread('stimulus_components/Detect/Interval_detect_2.wav');
+after_beats_instruction = audioread('stimulus_components/Detect/Beat_detect_2.wav');
 
 some_examples_instruction = audioread('stimulus_components/detect/Some_examples.wav');
 will_last_instruction = audioread('stimulus_components/detect/Will_last.wav');

@@ -43,8 +43,8 @@ function params = default_params()
     
     
 
-    lowfreq = 330;
-    hifreq = 880;
+    lowfreq = 400;
+    hifreq = 600;
     logmeanfreqs = log(lowfreq): (log(hifreq)-log(lowfreq))/3 : log(hifreq);
     logfreqspreads = .005 : .005 : .025;
     logvolspreads = 1.5 : .5 : 1.5;
@@ -64,7 +64,7 @@ function params = default_params()
     
     params.decibels = [-inf, ((1:(params.n_detect_difficulties-1)) - params.n_detect_difficulties/2)*params.delta_decibel + params.center_decibel];
     
-    params.amplitudes = params.anchor_amplitude * 10.^((params.decibels-params.anchor_decibel)/20)
+    params.amplitudes = params.anchor_amplitude * 10.^((params.decibels-params.anchor_decibel)/20);
     
     params.n_detect_pitches = length(logmeanfreqs);
     params.get_detect_id = @(pitch, difficulty) 100*pitch + 10*difficulty;

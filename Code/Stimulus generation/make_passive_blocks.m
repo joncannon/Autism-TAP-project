@@ -136,7 +136,7 @@ all_blocks{end+1} = block;
 
 trial_tag = 2+10*params.listen_standard_tag;
 filename = strcat(filepath, 'listen_random_', timestamp);
-block = stim_maker_standard(filename, uniform_delay_gen, 120, false, trial_tag, params);
+block = stim_maker_standard(filename, rand_delay_gen, 120, false, trial_tag, params);
 block.filename=filename;
 block.instruction_type = 'listen';
 block.instructions = [];%rxn_inst;

@@ -18,7 +18,7 @@ pointer = 2*44100;
 for i=1:length(intervals)
     
     if intervals(i)<0.02
-        warning(horzcat('interval too short for detection: interval ', num2str(i), ' = ', num2str(intervals(i));
+        warning(horzcat('interval too short for detection: interval ', num2str(i), ' = ', num2str(intervals(i))));
     end
     
     snd_num = identities(i);

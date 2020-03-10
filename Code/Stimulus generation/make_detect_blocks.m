@@ -97,7 +97,7 @@ some_beat_examples = vertcat(beat_example_1, beat_example_2, beat_example_3);
 beat_cued_detect_instruction = vertcat(detect_instruction, start_w_three_clicks_instruction, beat_example, after_beats_instruction, some_examples_instruction, some_beat_examples, will_last_instruction, lets_start_instruction);
 beat_cued_detect_instruction(:,2) = 0;
 
-contingency_detect_instruction = vertcat(detect_instruction, will_last_instruction, lets_start_instruction);
+contingency_detect_instruction = vertcat(detect_instruction, start_w_click_instruction, params.sound_list{params.standard_index}, will_last_instruction, lets_start_instruction);
 contingency_detect_instruction(:,2) = 0;
 
 
@@ -133,21 +133,21 @@ all_blocks{end+1} = contingency_block;
 
 trial_tag = 10*params.detect_tag + 2;
 filename = strcat(filepath, 'int_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 1, fixed_delay_gen, fixed_interval_gen, false, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 1, fixed_delay_gen, variable_interval_gen, false, trial_tag, params);
 block.filename=filename;
 block.instructions = interval_cued_detect_instruction;
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 3;
 filename=strcat(filepath, 'beat_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 3, fixed_delay_gen, fixed_interval_gen, false, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 3, fixed_delay_gen, variable_interval_gen, false, trial_tag, params);
 block.filename=filename;
 block.instructions = beat_cued_detect_instruction;
 all_blocks{end+1} = block;
 
 trial_tag = 10*params.detect_tag + 4;
 filename = strcat(filepath, 'rand_detect_', timestamp);
-block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, fixed_interval_gen, false, trial_tag, params);
+block = stim_maker_detect(filename, n_trials, 1, rand_long_delay_gen, variable_interval_gen, false, trial_tag, params);
 block.filename=filename;
 block.instructions = random_detect_instruction;
 all_blocks{end+1} = block;

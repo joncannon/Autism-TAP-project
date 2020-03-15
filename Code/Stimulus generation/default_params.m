@@ -41,7 +41,7 @@ function params = default_params()
     params.omission_index = 4;
     
     
-    
+    params.noise_amplitude = .01;
 
     lowfreq = 400;
     hifreq = 600;

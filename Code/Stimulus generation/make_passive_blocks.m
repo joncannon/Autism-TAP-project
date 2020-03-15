@@ -195,6 +195,7 @@ for i = 1:length(all_blocks)
     fullsound = vertcat(fullsound,separation_space);
 end
 
+
 audiowrite(strcat(filepath, 'all_passive_', timestamp, '.wav'), fullsound, 44100);
 
-save(strcat(filepath, 'all_passive.mat_', timestamp, '.mat'), 'fullsound', 'all_blocks');
+save(strcat(filepath, 'all_detect.mat_', timestamp, '.mat'), 'all_blocks');

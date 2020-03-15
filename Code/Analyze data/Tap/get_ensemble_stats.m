@@ -12,12 +12,15 @@ contingency_cued_rxn_times = zeros(6, sum(all_subjects_plus{1}{1}.code_is_audibl
 contingency_uncued_rxn_times = zeros(6, sum(all_subjects_plus{1}{1}.code_is_audible_tone & ~all_subjects_plus{1}{1}.code_is_cued));
 shifted_cued_rxn_times = zeros(6, sum(all_subjects_plus{1}{1}.code_is_audible_tone & all_subjects_plus{1}{1}.code_is_cued));
 
+interval_rxn_times = zeros(6, sum(all_subjects_plus{1}{2}.code_is_audible_tone));
 
 for s = 1:length(all_subjects_plus)    
     contingency_cued_rxn_times(s,:) = all_subjects_plus{s}{1}.all_rxn_times((all_subjects_plus{s}{1}.code_is_audible_tone & all_subjects_plus{s}{1}.code_is_cued))
     contingency_uncued_rxn_times(s,:) = all_subjects_plus{s}{1}.all_rxn_times((all_subjects_plus{s}{1}.code_is_audible_tone & ~all_subjects_plus{s}{1}.code_is_cued))
     shifted_cued_rxn_times(s,:) = contingency_cued_rxn_times(s,:) - nanmean(contingency_cued_rxn_times(s,:));
     %shifted_uncued_rxn_times(s,:) = all_subjects_plus{s}{1}.all_rxn_times((all_subjects_plus{s}{1}.code_is_audible_tone & ~all_subjects_plus{s}{1}.code_is_cued))
+    
+    interval_rxn_times(s,:) = all_subjects_plus{s}{2}.all_rxn_times((all_subjects_plus{s}{2}.code_is_audible_tone));
     
     for n = 1:3
         all_detection_rates(s,n) = all_subjects_plus{s}{n+1}.detect_rate;
@@ -28,22 +31,29 @@ end
 
 x_cued = all_subjects_plus{1}{1}.wav_event_times(all_subjects_plus{1}{1}.code_is_audible_tone & all_subjects_plus{1}{1}.code_is_cued);
 x_uncued = all_subjects_plus{1}{1}.wav_event_times(all_subjects_plus{1}{1}.code_is_audible_tone & ~all_subjects_plus{1}{1}.code_is_cued);
+x_interval = all_subjects_plus{1}{2}.wav_event_times(all_subjects_plus{1}{2}.code_is_audible_tone);
 
 cued_means = nanmean(contingency_cued_rxn_times, 1);
 uncued_means = nanmean(contingency_uncued_rxn_times, 1);
 shifted_cued_means = nanmean(shifted_cued_rxn_times, 1);
+interval_means = nanmean(interval_rxn_times, 1);
 
 detection_rate_mean = mean(all_detection_rates, 1);
 rxn_mean_mean = mean(all_rxn_means, 1);
 
 n_cued_rxns = sum(~isnan(contingency_cued_rxn_times), 1);
 n_uncued_rxns = sum(~isnan(contingency_uncued_rxn_times), 1);
+n_interval_rxns = sum(~isnan(interval_rxn_times), 1);
+
 valid_cued_rxns = (n_cued_rxns >= 3);
 valid_uncued_rxns = (n_uncued_rxns >= 3);
+valid_interval_rxns = (n_interval_rxns >= 3);
 
 cued_std_errors = nanstd(contingency_cued_rxn_times, 1)./sqrt(n_cued_rxns);
 uncued_std_errors = nanstd(contingency_uncued_rxn_times, 1)./sqrt(n_uncued_rxns);
 shifted_cued_std_errors = nanstd(contingency_cued_rxn_times, 1)./sqrt(n_cued_rxns);
+interval_std_errors = nanstd(interval_rxn_times, 1)./sqrt(n_interval_rxns);
+
 
 detection_rate_std_error = std(all_detection_rates, 1)/sqrt(6);
 rxn_mean_std_error = std(all_rxn_means, 1)/sqrt(6);
@@ -75,14 +85,14 @@ hold off
 %%
 figure()
 
-errorbar(x_cued(valid_cued_rxns), cued_means(valid_cued_rxns), cued_std_errors(valid_cued_rxns), 'o-');
+errorbar(x_cued(valid_cued_rxns), cued_means(valid_cued_rxns), cued_std_errors(valid_cued_rxns), '-');
 hold on
-%errorbar(x_uncued(valid_uncued_rxns), uncued_means(valid_uncued_rxns), uncued_std_errors(valid_uncued_rxns), 'o-');
+errorbar(x_uncued(valid_uncued_rxns), uncued_means(valid_uncued_rxns), uncued_std_errors(valid_uncued_rxns), '-');
 plot(all_subjects_plus{1}{1}.phase_transition*[1,1], [0,1])
-plot(x_cued(valid_cued_rxns), contingency_cued_rxn_times(:, valid_cued_rxns), 'o');
+%plot(x_cued(valid_cued_rxns), contingency_cued_rxn_times(:, valid_cued_rxns), 'o');
 
 
-plot(x_cued(~valid_cued_rxns), cued_means(~valid_cued_rxns), '*')
+%plot(x_cued(~valid_cued_rxns), cued_means(~valid_cued_rxns), '*')
 %plot(x_uncued(~valid_uncued_rxns), uncued_means(~valid_uncued_rxns), '*')
 
 %%
@@ -102,3 +112,10 @@ hold on
 %plot(x_uncued(valid_uncued_rxns), contingency_uncued_rxn_times(:, valid_uncued_rxns), 'o-');
 
 plot(all_subjects_plus{1}{1}.phase_transition*[1,1], [0,1])
+
+%%
+
+figure()
+
+errorbar(x_interval(valid_interval_rxns), interval_means(valid_interval_rxns), interval_std_errors(valid_interval_rxns), '-o');
+%plot(x_interval(valid_interval_rxns), interval_rxn_times(:, valid_interval_rxns), '-o');

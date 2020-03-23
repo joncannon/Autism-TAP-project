@@ -1,4 +1,4 @@
-function block=stim_maker_detect_contingency(filename, phases, random_delay_generator, trial_length_generator, trial_tag, params)
+function block=stim_maker_detect_contingency(filename, phases, choose_a_volume, random_delay_generator, trial_length_generator, trial_tag, params)
 
 identities = [];
 intervals = [];
@@ -14,7 +14,7 @@ for p = 1:length(phases)
         r = rand();
         event_counter = event_counter+1;
         
-        difficulty = floor(rand()*params.n_detect_difficulties)+1;
+        difficulty = choose_a_volume(floor(rand()*length(choose_a_volume))+1);
         pitch = floor(rand()*params.n_detect_pitches)+1;
         id = params.get_detect_id(pitch, difficulty);
         
@@ -22,7 +22,7 @@ for p = 1:length(phases)
             identities(end+1) = params.standard_index;
             intervals(end+1) = phase.cue_interval;
             identities(end+1) = id;
-            cued_target_counter = cued_target_counter+1
+            cued_target_counter = cued_target_counter+1;
             block.code(end+1:end+2)= [params.standard_index, id] + 100000 + p*1000000;
         else
             identities(end+1) = params.standard_index;

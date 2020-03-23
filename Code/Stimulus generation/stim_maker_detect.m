@@ -1,4 +1,4 @@
-function block=stim_maker_detect(filename, n_trials, n_cues, cue_delay_generator, trial_length_generator, bell, is_example, trial_tag, params)
+function block=stim_maker_detect(filename, n_trials, n_cues, choose_a_volume, cue_delay_generator, trial_length_generator, bell, is_example, trial_tag, params)
 
 identities = [];
 intervals = [];
@@ -21,9 +21,10 @@ for i = 1:n_trials
         difficulty = example_difficulties(i);
         pitch = example_pitches(i);
     else
-        difficulty = floor(rand()*params.n_detect_difficulties)+1;
+        difficulty = choose_a_volume(floor(rand()*length(choose_a_volume))+1);
         pitch = floor(rand()*params.n_detect_pitches)+1;
     end
+    
     
     id = params.get_detect_id(pitch, difficulty);
     

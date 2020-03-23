@@ -1,13 +1,13 @@
-function block=stim_maker_detect_practice(filename, n_trials, interval_generator, delta_db, trial_tag, params)
+function block=stim_maker_detect_practice(filename, n_trials, choose_a_volume, interval_generator, delta_db, trial_tag, params)
 
 identities = [];
 intervals = [];
 
 for i = 1:n_trials  
     
-    difficulty = floor(rand()*params.n_detect_difficulties)+1;
+    difficulty = choose_a_volume(floor(rand()*length(choose_a_volume))+1);
     pitch = floor(rand()*params.n_detect_pitches)+1;
-    id = params.get_detect_id(pitch, difficulty)
+    id = params.get_detect_id(pitch, difficulty);
     
     identities(end+1) = id;
     

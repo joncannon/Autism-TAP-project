@@ -102,7 +102,6 @@ figure()
 plot((1:10:length(event_audio))/44100, event_audio(1:10:end,1))
 hold on
 plot((1:10:length(tap_audio))/44100, tap_audio(1:10:end,1))
-keyboard;
     % Extract tap times and assign them to the corresponding blocks.
 
     

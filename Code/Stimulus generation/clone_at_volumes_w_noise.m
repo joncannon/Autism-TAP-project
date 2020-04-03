@@ -8,7 +8,7 @@ mkdir(horzcat(stimpath, stimfile, '_clones'));
 
 cd(horzcat(stimpath, stimfile, '_clones'));
 
-delta_db = -20:4:20;
+delta_db = -10:4:0;
 signal = stim_audio;
 
 wnoise = zeros(size(stim_audio));

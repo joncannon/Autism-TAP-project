@@ -1,7 +1,7 @@
 function updated_struct = divide_data(event_times, tap_times, block_struct)
 
 before_time = .1; % how much to widen tap threshold around events (sec)
-after_time = 10;
+after_time = 3;
 
 updated_struct = block_struct;
 event_index = 2;

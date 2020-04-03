@@ -142,6 +142,6 @@ function params = default_params()
 
     params.sync_amplitude = 0.02;
     params.sync_eeg_samples = 3;
-    params.intertrial_time = 5;
+    params.intertrial_time = 3;
     
     

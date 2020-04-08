@@ -51,19 +51,12 @@ sync_channel = 41;
 %%
 
 if with_tap
-
-    figure()
-    plot((1:10:length(event_audio))/44100, event_audio(1:10:end,1))
-    hold on
-    plot((1:10:length(tap_audio_filt))/44100, 30*tap_audio_filt(1:10:end,1))
-    % Extract tap times and assign them to the corresponding blocks.
-    keyboard;
-
     tap_audio = audioread(fullfile(tappath,tapfile));
     if size(tap_audio, 2)==2
         tap_audio = tap_audio(:,2);
     end
     event_audio = audioread(fullfile(rrpath, rrfile));
+
 
     if basic_filter
 
@@ -110,15 +103,21 @@ if with_tap
     figure()
     plot((1:10:length(event_audio))/44100, event_audio(1:10:end,1))
     hold on
-    plot((1:10:length(tap_audio_filt))/44100, 30*tap_audio_filt(1:10:end,1))
+    plot((1:10:length(tap_audio_filt))/44100, tap_audio_filt(1:10:end,1))
+    plot([1, length(tap_audio_filt)/44100], [1,1]*tap_threshold);
     keyboard;
 
-    wav_event_times = get_times(event_audio, event_audio_threshold, 1000)
-    wav_tap_times = get_times(tap_audio_filt, tap_threshold, 6000)
+    wav_event_times = get_times(event_audio, event_audio_threshold, 1000);
+    wav_tap_times = get_times(tap_audio_filt, tap_threshold, 6000);
     block_struct = divide_data(wav_event_times, wav_tap_times, block_struct)
     all_blocks_w_data = block_struct;
     %get_detection_reaction_data
+
+    all_taps = zeros([1, length(event_audio)]);
+    all_taps(floor(wav_tap_times*44100)) = 1;
+    plot((1:length(event_audio))/44100, all_taps);
 end
+
 
 %% Get all EEG-locked event times, add to block struct and event list
 if with_eeg

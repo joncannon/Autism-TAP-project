@@ -1,10 +1,7 @@
-function snd_total=master_stim_maker_nosync(filename, intervals, identities, params)
-
-% interval = vector
-
-snd_total=zeros(floor((sum(intervals)+2+2)*44100), 2);
+function snd_total=master_stim_maker_nosync(intervals, identities, params)
 
 Fs = params.Fs;
+snd_total=zeros(floor((sum(intervals))*Fs), 2);
 
 sound_list = params.sound_list;
 
@@ -21,4 +18,3 @@ end
 
 snd_total(:, 2)=snd_total(:, 1);
 
-audiowrite(strcat(filename, '.wav'),snd_total,Fs);

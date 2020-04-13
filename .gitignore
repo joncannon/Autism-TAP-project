@@ -6,3 +6,6 @@ stimulus_sequences*
 examples*
 *Story_*
 *~
+*.wav
+*.mat
+*Jon_private*

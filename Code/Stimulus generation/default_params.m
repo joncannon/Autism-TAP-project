@@ -1,6 +1,7 @@
 function params = default_params()
     params = struct();
 
+    params.components_path = '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Code/Stimulus generation/stimulus_components/'
     params.lead_in=4;
     params.allowable_distance = 3;
 
@@ -11,13 +12,21 @@ function params = default_params()
 
 %    params.beep_shift = floor(.1*params.Fs);
 
-    tick = audioread('stimulus_components/wood_tick.wav');
+    tick = audioread(strcat(params.components_path, 'wood_tick.wav'));
     params.sound_list{1} = 0.2*tick(:,1);
     params.standard_index = 1;
+    
+    params.sound_list{7} = 0.05*tick(:,1);
+    params.quiet_index = 7;
 
     params.sound_list{2} = .2*resample(tick(:,1), 5,4);
     params.deviant_index = 2;
-
+    
+    bell = audioread(strcat(params.components_path, 'Bell.wav'));
+    params.sound_list{6} = 0.2*bell(:,1);
+    size(params.sound_list{6})
+    params.bell_index = 6;
+    
     x_beep = 1:(.2 * 44100);
     n_samples = length(x_beep);
     
@@ -35,9 +44,11 @@ function params = default_params()
     params.sound_list{4} = 0;
     params.omission_index = 4;
     
+    
+    params.noise_amplitude = .001;
 
-    lowfreq = 330;
-    hifreq = 880;
+    lowfreq = 400;
+    hifreq = 600;
     logmeanfreqs = log(lowfreq): (log(hifreq)-log(lowfreq))/3 : log(hifreq);
     logfreqspreads = .005 : .005 : .025;
     logvolspreads = 1.5 : .5 : 1.5;
@@ -50,14 +61,14 @@ function params = default_params()
     params.calibration_sound = params.anchor_amplitude*sin((1:(anchor_duration * 44100)) * 2*pi * 440 / 44100)';
     % set to 50 decibels
     
-    params.delta_decibel = 2.5;
-    params.center_decibel = 15;
+    params.delta_decibel = 2;
+    params.center_decibel = 12;
     
-    params.n_detect_difficulties = 6;
+    params.n_detect_difficulties = 7;
     
-    params.decibels = [-inf, ((1:(params.n_detect_difficulties-1)) - params.n_detect_difficulties/2)*params.delta_decibel + params.center_decibel];
+    params.decibels = [-inf, ((1:(params.n_detect_difficulties-2)) - params.n_detect_difficulties/2)*params.delta_decibel + params.center_decibel, 40];
     
-    params.amplitudes = params.anchor_amplitude * 10.^((params.decibels-params.anchor_decibel)/20)
+    params.amplitudes = params.anchor_amplitude * 10.^((params.decibels-params.anchor_decibel)/20);
     
     params.n_detect_pitches = length(logmeanfreqs);
     params.get_detect_id = @(pitch, difficulty) 100*pitch + 10*difficulty;
@@ -131,4 +142,6 @@ function params = default_params()
 
     params.sync_amplitude = 0.02;
     params.sync_eeg_samples = 3;
-    params.intertrial_time = 5;
+    params.intertrial_time = 3;
+    
+    

@@ -47,7 +47,7 @@ if valid
         duration = all_durations(diff);
         silent_gap = floor(Fs*duration);
         snd_total_1 = snd_total;
-        snd_total_1(1+pointer:pointer+silent_gap, :) = 0;
+        snd_total_1(1+pointer-silent_gap:pointer, :) = 0;
         %pointer = pointer + floor(Fs * intervals(i));
 
         trial.sounds{end+1} = snd_total_1;

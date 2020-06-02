@@ -9,3 +9,4 @@ examples*
 *.wav
 *.mat
 *Jon_private*
+!*crunch.wav

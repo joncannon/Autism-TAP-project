@@ -10,3 +10,4 @@ examples*
 *.mat
 *Jon_private*
 !*crunch.wav
+!*pub.wav

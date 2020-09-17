@@ -38,7 +38,7 @@ function params = default_params()
     % beepup = .02*sin(x_beep * 2*pi .* risingfreq / 44100).* envelope;
     % beepdown = .02*sin(x_beep * 2*pi .* fallingfreq / 44100).* envelope;
 
-    params.sound_list{3} = beep1';
+    params.sound_list{3} = .2*resample(tick(:,1), 4,5)%beep1';
     params.target_index = 3;
 
     params.sound_list{4} = 0;
@@ -142,6 +142,6 @@ function params = default_params()
 
     params.sync_amplitude = 0.02;
     params.sync_eeg_samples = 3;
-    params.intertrial_time = 3;
+    params.intertrial_time = 1; %3
     
     

@@ -8,6 +8,9 @@
 
 %%
 
+
+addpath '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Code/Analyze data/Tap'
+
 basic_filter = false;
 heavy_filter = false;
 
@@ -43,7 +46,7 @@ end
 
 
 event_eeg_threshold = 1400;
-tap_threshold = .1%.06; %.06
+tap_threshold = .05%.06; %.06
 event_audio_threshold = .25;
 sync_channel = 41;
 

@@ -7,8 +7,8 @@ tick = 0.2*tick(:,1);
 
 
 for s = 1:length(shifts)
-    intervals = [period, period, period, period+shifts(s), period];
-    sound_list = {tick, tick, tick, tick, tick};
+    intervals = [period, period, period, period+shifts(s), period, period, period, period];
+    sound_list = {tick, tick, tick, tick, tick, [], [], []};
 
     snd_total=zeros(floor((sum(intervals))*Fs), 2);
     pointer = 0;

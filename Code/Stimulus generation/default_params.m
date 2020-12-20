@@ -1,20 +1,28 @@
 function params = default_params()
     params = struct();
 
-    params.components_path = '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Code/Stimulus generation/stimulus_components/'
-    params.lead_in=4;
+    params.components_path = '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Code/Stimulus generation/stimulus_components/';
     params.allowable_distance = 3;
 
     params.save_separate = false;
     params.wav_separate = false;
     params.Fs = 44100;
     params.sound_list = {};
+    
+    %remove
+    params.lead_in=3;
+    params.allowable_distance=3;
+    params.target_delay=2;
 
 %    params.beep_shift = floor(.1*params.Fs);
 
     tick = audioread(strcat(params.components_path, 'wood_tick.wav'));
     params.sound_list{1} = 0.2*tick(:,1);
     params.standard_index = 1;
+    
+    tap = audioread(strcat(params.components_path, 'tap.m4a'));
+    params.sound_list{8} = tap;
+    params.tap_index = 8;
     
     params.sound_list{7} = 0.05*tick(:,1);
     params.quiet_index = 7;
@@ -24,7 +32,7 @@ function params = default_params()
     
     bell = audioread(strcat(params.components_path, 'Bell.wav'));
     params.sound_list{6} = 0.2*bell(:,1);
-    size(params.sound_list{6})
+    size(params.sound_list{6});
     params.bell_index = 6;
     
     x_beep = 1:(.2 * 44100);
@@ -38,7 +46,7 @@ function params = default_params()
     % beepup = .02*sin(x_beep * 2*pi .* risingfreq / 44100).* envelope;
     % beepdown = .02*sin(x_beep * 2*pi .* fallingfreq / 44100).* envelope;
 
-    params.sound_list{3} = .2*resample(tick(:,1), 4,5)%beep1';
+    params.sound_list{3} = beep1';
     params.target_index = 3;
 
     params.sound_list{4} = 0;

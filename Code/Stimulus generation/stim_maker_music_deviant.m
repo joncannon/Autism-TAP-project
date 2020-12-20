@@ -1,4 +1,4 @@
-function block=stim_maker_deviant(filename, period, n_events, deviant_rate, end_target, trial_tag, params)
+function block=stim_maker_music_deviant(filename, period, n_events_before_after, deviant_rate, end_target, trial_tag, params)
 
 % INPUTS:
 % . filename    - unique file identifier for wav, save, etc.
@@ -8,17 +8,32 @@ function block=stim_maker_deviant(filename, period, n_events, deviant_rate, end_
 allowable_distance = params.allowable_distance;
 lead_in = params.lead_in;
 
-identities = zeros(1, n_events);
-intervals = zeros(1,n_events)+period;
+
+identities = [];
+intervals = [];
 
 counter = 0;
 
-for i=1:n_events
+for i=1:n_events_before_after(1)
+    intervals(end+1) = period;
     if (rand()>deviant_rate || i<=lead_in || counter>0)
-        identities(i) = params.standard_index;
+        identities(end+1) = params.standard_index;
         counter = counter-1;
     else
-        identities(i) = params.deviant_index;
+        identities(end+1) = params.deviant_index;
+        counter = allowable_distance;
+    end 
+end
+
+intervals(end) = 4*period;
+
+for i=1:n_events_before_after(2)
+    intervals(end+1) = period;
+    if (rand()>deviant_rate || i<=lead_in || counter>0)
+        identities(end+1) = params.standard_index;
+        counter = counter-1;
+    else
+        identities(end+1) = params.deviant_index;
         counter = allowable_distance;
     end 
 end
@@ -37,7 +52,7 @@ block.params = params;
 
 block.trial_tag = trial_tag;
 block.code = identities + 100*trial_tag;
-block.type = 'deviant';
+block.type = 'music_deviant';
 block.intervals = intervals;
 block.identities = identities;
 block.period = period;

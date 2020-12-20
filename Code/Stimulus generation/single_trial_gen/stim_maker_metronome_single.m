@@ -1,4 +1,4 @@
-function stim_maker_metronome_single(filestem, period, n_clicks)
+function times = stim_maker_metronome_single(filestem, period, n_clicks, jitter)
 Fs = 44100;
 
 components_path = '/Users/cannon/Documents/MATLAB/Entrainment-Contingency/Code/Stimulus generation/stimulus_components/'
@@ -10,7 +10,10 @@ for i=1:n_clicks
     sound_list{i} = tick;
 end
 
-intervals = period+zeros(1,n_clicks);
+intervals_0 = period+zeros(1,n_clicks);
+times_0 = cumsum(intervals_0);
+times = times_0 + jitter*min(period/2, max(-period/2, randn(size(times_0))));
+intervals = diff(times);
 
     snd_total=zeros(floor((sum(intervals))*Fs), 2);
     pointer = 0;

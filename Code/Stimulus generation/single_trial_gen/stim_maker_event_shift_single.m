@@ -10,6 +10,7 @@ for s = 1:length(shifts)
     intervals = [period, period, period, period+shifts(s), period, period, period, period];
     sound_list = {tick, tick, tick, tick, tick, [], [], []};
     times = cumsum(intervals);
+    times = [0, times(1:end-1)];
     
     snd_total=zeros(floor((sum(intervals))*Fs), 2);
     pointer = 0;
